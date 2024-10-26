@@ -18,7 +18,8 @@
         "image": "./assets/images/splash_screens/splash.png",
         "resizeMode": "contain",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "bundleIdentifier": "com.quanber123.AgiltsMobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +33,9 @@
       "output": "static",
       "favicon": "./assets/images/favicon-32x32.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router"
+    ],
     "experiments": {
       "typedRoutes": true
     },

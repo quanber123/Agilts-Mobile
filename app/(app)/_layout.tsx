@@ -65,15 +65,46 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='explore'
+        name='products'
         options={{
-          title: 'Explore',
+          title: 'Sản phẩm',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? 'code-slash' : 'code-slash-outline'}
+              name={focused ? 'storefront' : 'storefront-outline'}
               color={color}
             />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name='services'
+        options={{
+          title: 'Dịch vụ',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? 'construct' : 'construct-outline'}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name='user'
+        options={{
+          title: 'Tôi',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? 'person-circle' : 'person-circle-outline'}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name='order'
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
         }}
       />
     </Tabs>

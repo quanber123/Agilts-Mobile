@@ -3,12 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type InitialState = {
   user: User | null;
-  isLoggedIn: boolean;
+  token: string | null;
 };
 
 const initialState: InitialState = {
   user: null,
-  isLoggedIn: false,
+  token: null,
 };
 
 export const userSlice = createSlice({
@@ -18,11 +18,11 @@ export const userSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
-    setIsLoggedIn: (state, action) => {
-      state.isLoggedIn = action.payload;
+    setToken: (state, action) => {
+      state.token = action.payload;
     },
   },
 });
 export const userState = (state: { user: InitialState }) => state.user.user;
-export const { setUser, setIsLoggedIn } = userSlice.actions;
+export const { setUser, setToken } = userSlice.actions;
 export default userSlice.reducer;

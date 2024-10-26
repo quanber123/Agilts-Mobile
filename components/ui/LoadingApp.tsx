@@ -11,9 +11,15 @@ export default function LoadingApp() {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'white',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 9999,
   },
 });

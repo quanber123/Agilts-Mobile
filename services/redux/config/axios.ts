@@ -1,11 +1,47 @@
 import type { BaseQueryFn } from '@reduxjs/toolkit/query';
 import axios from 'axios';
 import type { AxiosRequestConfig, AxiosError } from 'axios';
+import * as SecureStore from 'expo-secure-store';
+
+import { Platform } from 'react-native';
+
+const getToken = async () => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('x-user-session');
+  } else {
+    return await SecureStore.getItemAsync('x-user-session');
+  }
+};
+
+const apiClient = axios.create({
+  baseURL: process.env.EXPO_PUBLIC_BACKEND_URL as string,
+  withCredentials: true,
+  withXSRFToken: true,
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    Accept: 'application/json',
+  },
+});
+
+apiClient.interceptors.request.use(
+  async (config) => {
+    try {
+      const token = await getToken();
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error('Error fetching token:', error);
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export const axiosBaseQuery =
-  (
-    { baseUrl }: { baseUrl: string } = { baseUrl: '' }
-  ): BaseQueryFn<
+  (): BaseQueryFn<
     {
       url: string;
       method?: AxiosRequestConfig['method'];
@@ -16,21 +52,17 @@ export const axiosBaseQuery =
     unknown,
     unknown
   > =>
-  async ({ url, method, data, params }) => {
+  async ({ url, method, data, params, headers }) => {
     try {
       const config: AxiosRequestConfig = {
-        url: baseUrl + url,
+        url,
         method,
         data,
         params,
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        withCredentials: true,
-        withXSRFToken: true,
+        headers,
       };
 
-      const result = await axios(config);
+      const result = await apiClient(config);
 
       return { data: result.data };
     } catch (axiosError) {

@@ -8,12 +8,12 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SessionProvider } from '@/contexts/SessionProvider';
 import { Provider } from 'react-redux';
 import { store } from '@/services/redux/store';
-
+import { UserProvider } from '@/contexts/UserProvider';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -34,16 +34,34 @@ export default function RootLayout() {
   }
 
   return (
-    <Provider store={store}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <SessionProvider>
-          <Stack>
-            <Stack.Screen name='(app)' options={{ headerShown: false }} />
-            <Stack.Screen name='sign-in' options={{ headerShown: false }} />
-            <Stack.Screen name='+not-found' options={{ headerShown: false }} />
-          </Stack>
-        </SessionProvider>
-      </ThemeProvider>
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <SessionProvider>
+            <UserProvider>
+              <Stack>
+                <Stack.Screen name='(app)' options={{ headerShown: false }} />
+                <Stack.Screen name='sign-in' options={{ headerShown: false }} />
+                <Stack.Screen name='sign-up' options={{ headerShown: false }} />
+                <Stack.Screen
+                  name='two-factor'
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name='forgot-password'
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name='+not-found'
+                  options={{ headerShown: false }}
+                />
+              </Stack>
+            </UserProvider>
+          </SessionProvider>
+        </ThemeProvider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 }
