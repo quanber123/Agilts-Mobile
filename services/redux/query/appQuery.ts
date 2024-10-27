@@ -118,7 +118,6 @@ export const appApi = createApi({
       }),
       verifyTwoFactor: builder.mutation({
         query: (body) => {
-          console.log(body);
           return {
             url: `/api/two-factor-challenge`,
             method: 'POST',
@@ -141,7 +140,6 @@ export const appApi = createApi({
       }),
       createWishlist: builder.mutation({
         query: (body) => {
-          console.log(body);
           return {
             url: `/api/wishlist`,
             method: 'POST',

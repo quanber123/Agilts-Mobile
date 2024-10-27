@@ -3,30 +3,26 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
+import LoadingApp from '@/components/ui/LoadingApp';
+import CartButton from '@/components/ui/CartButton';
 
 export default function UserScreen() {
-  const { user, signOut } = useSession();
+  const { user, signOut, isLoadingLogout } = useSession();
   const router = useRouter();
+  if (isLoadingLogout) return <LoadingApp />;
   return (
     <SafeAreaView className='flex-1'>
       <View className='relative h-[150px] bg-red-500'>
-        <View className='absolute top-12 right-4 flex-row items-center gap-x-4'>
-          <Pressable onPress={() => router.push('/user/settings')}>
+        <View className='absolute top-12 right-4 flex-row items-center'>
+          <Pressable
+            className='mx-3'
+            onPress={() => router.push('/user/settings')}
+          >
             <Feather name='settings' size={24} color='white' />
           </Pressable>
-          <Pressable
-            className='relative'
-            onPress={() => router.push('/user/cart')}
-          >
-            <Feather name='shopping-cart' size={24} color='white' />
-            <Text className='absolute -top-1/3 -right-2 bg-red-500 text-white border border-white w-5 h-5 rounded-full text-sm text-center'>
-              1
-            </Text>
-          </Pressable>
+          <CartButton />
         </View>
         <View className='absolute bottom-4 left-4 flex-row items-center gap-x-4'>
           <Ionicons name='person-circle-outline' size={56} color='#f5f5f5' />
@@ -131,6 +127,9 @@ export default function UserScreen() {
           <Text>Trum tâm trợ giúp</Text>
         </View>
         <FontAwesome6 name='chevron-right' size={12} color='black' />
+      </Pressable>
+      <Pressable onPress={signOut} className='bg-red-500 mt-auto p-4'>
+        <Text className='text-center font-bold text-white'>Đăng xuất</Text>
       </Pressable>
     </SafeAreaView>
   );

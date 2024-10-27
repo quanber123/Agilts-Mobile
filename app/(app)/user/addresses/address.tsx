@@ -15,17 +15,9 @@ export default function AddressScreen() {
           key={a.id}
           onPress={() => router.push(`/user/update-address/${a.id}`)}
         >
-          {a?.customer_name && (
-            <View>
-              <Text className='font-bold'>{a?.customer_name}</Text>
-              <Text className='text-neutral-600'>|</Text>
-              <Text>{a?.customer_phone_number}</Text>
-            </View>
-          )}
-          <Text className='text-neutral-600'>{a.address_detail}</Text>
-          {/* <Text className='text-neutral-600'>
-            {a.ward}, {a.district}, {a.province}
-          </Text> */}
+          <Text className='font-bold'>{a?.customer_name}</Text>
+          <Text>{a?.customer_phone_number}</Text>
+          <Text className='text-neutral-600'>{a.address_preview}</Text>
           {a.default && (
             <Text className='w-[72px] px-1 border border-red-500 text-red-500 text-center text-sm'>
               Mặc định

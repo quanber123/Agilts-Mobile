@@ -1,4 +1,4 @@
-import { Address, Cart, Document, Wishlist } from '@/types/types';
+import { Address, Cart, Wishlist } from '@/types/types';
 import {
   createContext,
   Dispatch,
@@ -14,6 +14,7 @@ import {
 } from '@/services/redux/query/appQuery';
 
 type CTX = {
+  previousRoute: string | null;
   wishlist: Wishlist[] | [];
   isFetchingWishlist: boolean;
   cart: Cart[] | [];
@@ -27,6 +28,7 @@ type CTX = {
 export const UserContext = createContext({} as CTX);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [previousRoute, setPreviousRoute] = useState<string | null>(null);
   const { user } = useSession();
   const [wishlist, setWishlist] = useState<Wishlist[] | []>([]);
   const [cart, setCart] = useState<Cart[] | []>([]);
@@ -82,11 +84,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isSuccessAddress, addressData]);
   const contextValue = {
+    previousRoute,
     wishlist,
     isFetchingWishlist,
     cart,
     isFetchingCart,
     addresses,
+    setPreviousRoute,
     isFetchingAddress,
     defaultAddress,
     setDefaultAddress,

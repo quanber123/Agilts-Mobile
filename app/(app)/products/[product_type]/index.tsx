@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import {
@@ -6,11 +6,9 @@ import {
   useGetProductsQuery,
 } from '@/services/redux/query/appQuery';
 import { formatQueryToString } from '@/services/utils/format';
-import { FlatList } from 'react-native-gesture-handler';
 import SingleProduct from '@/components/ui/SingleProduct';
 import { Product } from '@/types/types';
-import { productsType } from '@/config/products_type';
-import { Feather } from '@expo/vector-icons';
+import ListItem from '@/components/ui/ListItem';
 
 export default function ProductTypeScreen() {
   const params = useLocalSearchParams();
@@ -18,31 +16,26 @@ export default function ProductTypeScreen() {
   const [curPage, setCurPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const queryString = useMemo(() => {
-    return formatQueryToString(params, 'product_type');
+    return formatQueryToString(params, '');
   }, [params]);
-  const curType = useMemo(() => {
-    return productsType.find((p) => p.key === params.product_type);
-  }, [params.product_type]);
   const {
     data: filterData,
     isLoading: isLoadingFilter,
     isError: isErrorFilter,
-  } = useGetProductFilterQuery(params.product_type, {
-    skip: !params.product_type,
-  });
+  } = useGetProductFilterQuery(params?.product_type);
   const {
     data: productsData,
     isSuccess: isSuccessProduct,
     isFetching: isFetchingProduct,
-  } = useGetProductsQuery(
-    { type: params.product_type, search: `page=${curPage}&${queryString}` },
-    { skip: !params.product_type }
-  );
+  } = useGetProductsQuery({
+    type: params?.product_type,
+    search: `page=${curPage}&${queryString}`,
+  });
   const loadMore = useCallback(() => {
-    if (hasMore && !isFetchingProduct) {
+    if (hasMore && !isFetchingProduct && isSuccessProduct) {
       setCurPage((prevPage) => prevPage + 1);
     }
-  }, [hasMore, isFetchingProduct]);
+  }, [hasMore, isFetchingProduct, isSuccessProduct]);
   useEffect(() => {
     if (!isFetchingProduct && isSuccessProduct && productsData && hasMore) {
       if (productsData?.data?.length === 0) {
@@ -57,32 +50,22 @@ export default function ProductTypeScreen() {
   }, [isFetchingProduct, isSuccessProduct, productsData, hasMore]);
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <View className='h-[120px] pt-4 bg-red-500 flex-row justify-between items-center px-4'>
-        <Text className='text-xl font-semibold uppercase tracking-[4px] text-white'>
-          {curType?.value}
-        </Text>
-        <Feather name='filter' size={26} color='white' />
-      </View>
-      {!isFetchingProduct && isSuccessProduct && products?.length > 0 && (
-        <FlatList
+      {products?.length > 0 && (
+        <ListItem
           data={products}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }: any) => (
             <SingleProduct key={index} product={item} />
           )}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: 'space-between' }}
-          contentContainerStyle={{ gap: 40 }}
+          contentContainerStyle={40}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            isFetchingProduct ? (
-              <ActivityIndicator size='small' color='#ef4444' />
-            ) : null
-          }
+          isPaginate={true}
+          isLoading={isFetchingProduct}
         />
       )}
-      {!isFetchingProduct && isSuccessProduct && products?.length === 0 && (
+      {products?.length === 0 && (
         <View className='flex-1 justify-center items-center'>
           <Text className='text-xl font-bold'>Không có sản phẩm!</Text>
         </View>

@@ -1,23 +1,5 @@
-import { Feather } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
-import { Pressable, Text } from 'react-native';
+import { Stack } from 'expo-router';
 import { LocationProvider } from './contexts/LocationProvider';
-import { useContext } from 'react';
-import { UserContext } from '@/contexts/UserProvider';
-const CartButton = () => {
-  const router = useRouter();
-  const { cart } = useContext(UserContext);
-  return (
-    <Pressable className='relative' onPress={() => router.push('/user/cart')}>
-      <Feather name='shopping-cart' size={24} color='white' />
-      {cart?.length > 0 && (
-        <Text className='absolute -top-1/3 -right-2 bg-red-500 text-white border border-white w-5 h-5 rounded-full text-sm text-center'>
-          {cart?.length}
-        </Text>
-      )}
-    </Pressable>
-  );
-};
 
 const UserLayout = () => {
   return (
@@ -30,12 +12,11 @@ const UserLayout = () => {
       >
         <Stack.Screen name='index' options={{ headerShown: false }} />
         <Stack.Screen
-          name='address'
+          name='address/index'
           options={{
             headerTitle: 'Địa chỉ của tôi',
             headerTitleAlign: 'center',
             headerShown: true,
-            headerRight: () => <CartButton />,
           }}
         />
         <Stack.Screen
@@ -70,15 +51,31 @@ const UserLayout = () => {
           }}
         />
         <Stack.Screen
-          name='orders'
+          name='order/item/index'
           options={{
-            headerTitle: 'Đơn hàng',
+            headerTitle: 'Đơn mua phụ tùng/phụ kiện',
             headerTitleAlign: 'center',
             headerShown: true,
           }}
         />
         <Stack.Screen
-          name='settings'
+          name='order/motor-cycle/index'
+          options={{
+            headerTitle: 'Đơn mua xe máy',
+            headerTitleAlign: 'center',
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name='review/index'
+          options={{
+            headerTitle: 'Đánh giá sản phẩm',
+            headerTitleAlign: 'center',
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name='settings/index'
           options={{
             headerTitle: 'Thiết lập tài khoản',
             headerTitleAlign: 'center',

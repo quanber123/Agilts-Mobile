@@ -1,5 +1,5 @@
-import { View, Text, FlatList, Pressable } from 'react-native';
-import React, { useCallback, useContext, useEffect } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { LocationContext } from '../contexts/LocationProvider';
 import {
   useGetDistrictsQuery,
@@ -7,8 +7,9 @@ import {
   useGetWardsQuery,
 } from '@/services/redux/query/countryQuery';
 import { Feather } from '@expo/vector-icons';
-import LoadingApp from '@/components/ui/LoadingApp';
 import { useRouter } from 'expo-router';
+import { ScrollView } from 'react-native';
+import ListItem from '@/components/ui/ListItem';
 export default function LocationScreen() {
   const router = useRouter();
   const {
@@ -18,17 +19,107 @@ export default function LocationScreen() {
     typeActionLocation,
     setTypeActionLocation,
   } = useContext(LocationContext);
-  const { data: provinceData, isLoading: isLoadingProvince } =
-    useGetProvincesQuery(null);
-  const { data: districtsData, isLoading: isLoadingDistricts } =
-    useGetDistrictsQuery(location.province.code, {
+  const [provinces, setProvinces] = useState<any[]>([]);
+  const [curPageProvince, setCurPageProvince] = useState(1);
+  const [hasMoreProvince, setHasMoreProvince] = useState(true);
+  const [districts, setDistricts] = useState<any[]>([]);
+  const [curPageDistrict, setCurPageDistrict] = useState(1);
+  const [hasMoreDistrict, setHasMoreDistrict] = useState(true);
+  const [wards, setWards] = useState<any[]>([]);
+  const [curPageWard, setCurPageWard] = useState(1);
+  const [hasMoreWard, setHasMoreWard] = useState(true);
+  const {
+    data: provinceData,
+    isFetching: isLoadingProvince,
+    isSuccess: isSuccessProvince,
+  } = useGetProvincesQuery(curPageProvince);
+  const {
+    data: districtsData,
+    isFetching: isLoadingDistricts,
+    isSuccess: isSuccessDistrict,
+  } = useGetDistrictsQuery(
+    { provinceCode: location.province.code, page: curPageDistrict },
+    {
       skip: !location.province.code,
       refetchOnReconnect: true,
-    });
-  const { data: wardsData, isLoading: isLoadingWards } = useGetWardsQuery(
-    location.district.code,
+    }
+  );
+  const {
+    data: wardsData,
+    isFetching: isLoadingWards,
+    isSuccess: isSuccessWard,
+  } = useGetWardsQuery(
+    { districtCode: location.district.code, page: curPageWard },
     { skip: !location.district.code, refetchOnReconnect: true }
   );
+  const loadMoreProvince = useCallback(() => {
+    if (hasMoreProvince && !isLoadingProvince && isSuccessProvince) {
+      setHasMoreProvince(true);
+      setCurPageProvince((prevPage) => prevPage + 1);
+    }
+  }, [hasMoreProvince, isLoadingProvince, isSuccessProvince]);
+  useEffect(() => {
+    if (
+      !isLoadingProvince &&
+      isSuccessProvince &&
+      provinceData &&
+      hasMoreProvince
+    ) {
+      if (provinceData?.data?.length === 0) {
+        setProvinces((prevProvinces) => [...prevProvinces]);
+      } else {
+        setProvinces((prevProvinces) => [
+          ...prevProvinces,
+          ...provinceData?.data,
+        ]);
+      }
+      if (curPageProvince + 1 > provinceData?.total_pages) {
+        setHasMoreProvince(false);
+      }
+    }
+  }, [isLoadingProvince, isLoadingProvince, provinceData, hasMoreProvince]);
+  const loadMoreDistrict = useCallback(() => {
+    if (hasMoreDistrict && !isLoadingDistricts && isSuccessDistrict) {
+      setCurPageDistrict((prevPage) => prevPage + 1);
+    }
+  }, [hasMoreDistrict, isLoadingDistricts, isSuccessDistrict]);
+  useEffect(() => {
+    if (
+      !isLoadingDistricts &&
+      isSuccessDistrict &&
+      districtsData &&
+      hasMoreDistrict
+    ) {
+      if (districtsData?.data?.length === 0) {
+        setDistricts((prevDistricts) => [...prevDistricts]);
+      } else {
+        setDistricts((prevDistricts) => [
+          ...prevDistricts,
+          ...districtsData?.data,
+        ]);
+      }
+      if (curPageDistrict + 1 > districtsData?.total_pages) {
+        setHasMoreDistrict(false);
+      }
+    }
+  }, [isLoadingDistricts, isLoadingProvince, districtsData, hasMoreDistrict]);
+  const loadMoreWard = useCallback(() => {
+    if (hasMoreWard && !isLoadingWards && isSuccessWard) {
+      setCurPageWard((prevPage) => prevPage + 1);
+    }
+  }, [hasMoreWard, isLoadingWards, isSuccessWard]);
+  useEffect(() => {
+    if (!isLoadingWards && isSuccessWard && wardsData && hasMoreWard) {
+      if (wardsData?.data?.length === 0) {
+        setWards((prevWards) => [...prevWards]);
+      } else {
+        setWards((prevWards) => [...prevWards, ...wardsData?.data]);
+      }
+      if (curPageWard + 1 > wardsData?.total_pages) {
+        setHasMoreWard(false);
+      }
+    }
+  }, [isLoadingWards, wardsData, isSuccessWard, hasMoreWard]);
   const handleSelectedWard = useCallback(
     (w: any) => {
       setLocation((prevLocation) => {
@@ -36,7 +127,7 @@ export default function LocationScreen() {
           ...prevLocation,
           ward: {
             code: w?.id,
-            name: w?.full_name,
+            name: w?.name,
           },
         };
       });
@@ -51,7 +142,7 @@ export default function LocationScreen() {
     if (typeActionLocation === 'update') {
       if (provinceData) {
         const curProvince = provinceData?.data?.find((d: any) => {
-          return d?.full_name === location?.province?.name;
+          return d?.name === location?.province?.name;
         });
         if (curProvince) {
           setLocation((prevLocation) => {
@@ -59,7 +150,7 @@ export default function LocationScreen() {
               ...prevLocation,
               province: {
                 code: curProvince?.id,
-                name: curProvince?.full_name,
+                name: curProvince?.name,
               },
             };
           });
@@ -67,7 +158,7 @@ export default function LocationScreen() {
       }
       if (districtsData) {
         const curDistrict = districtsData?.data?.find((d: any) => {
-          return d?.full_name === location?.district?.name;
+          return d?.name === location?.district?.name;
         });
         if (curDistrict) {
           setLocation((prevLocation) => {
@@ -75,7 +166,7 @@ export default function LocationScreen() {
               ...prevLocation,
               district: {
                 code: curDistrict?.id,
-                name: curDistrict?.full_name,
+                name: curDistrict?.name,
               },
             };
           });
@@ -83,8 +174,7 @@ export default function LocationScreen() {
       }
     }
   }, [typeActionLocation, provinceData, districtsData]);
-  if (isLoadingProvince || isLoadingDistricts || isLoadingWards)
-    return <LoadingApp />;
+
   return (
     <View>
       {location.province.name && (
@@ -114,12 +204,14 @@ export default function LocationScreen() {
         </View>
       )}
       {!location.province.name && (
-        <View>
+        <ScrollView
+          nestedScrollEnabled={true}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
           <Text className='p-4'>Tỉnh/Thành phố</Text>
-          <FlatList
-            className='flex-col bg-white'
-            data={provinceData?.data}
-            renderItem={({ item }) => (
+          <ListItem
+            data={provinces}
+            renderItem={({ item }: any) => (
               <Pressable
                 className='p-4 border-b border-neutral-200 flex-row justify-between items-center'
                 key={item?.id}
@@ -129,7 +221,7 @@ export default function LocationScreen() {
                       ...prevLocation,
                       province: {
                         code: item?.id,
-                        name: item?.full_name,
+                        name: item?.name,
                       },
                     };
                   })
@@ -137,29 +229,34 @@ export default function LocationScreen() {
               >
                 <Text
                   className={`${
-                    location?.province?.name === item?.full_name
+                    location?.province?.name === item?.name
                       ? 'text-red-500'
                       : ''
                   }`}
                 >
-                  {item?.full_name}
+                  {item?.name}
                 </Text>
-                {location?.province?.name === item?.full_name && (
+                {location?.province?.name === item?.name && (
                   <Feather name='check' size={18} color='#ef4444' />
                 )}
               </Pressable>
             )}
-            keyExtractor={(item) => item.id}
-          ></FlatList>
-        </View>
+            onEndReached={loadMoreProvince}
+            onEndReachedThreshold={0.1}
+            isLoading={isLoadingProvince}
+            isPaginate={true}
+          />
+        </ScrollView>
       )}
       {!location.district.name && (
-        <View>
+        <ScrollView
+          nestedScrollEnabled={true}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
           <Text className='p-4'>Quận/Huyện</Text>
-          <FlatList
-            className='flex-col bg-white'
-            data={districtsData?.data}
-            renderItem={({ item }) => (
+          <ListItem
+            data={districts}
+            renderItem={({ item }: any) => (
               <Pressable
                 className='p-4 border-b border-neutral-200 flex-row justify-between items-center'
                 key={item?.id}
@@ -169,7 +266,7 @@ export default function LocationScreen() {
                       ...prevLocation,
                       district: {
                         code: item?.id,
-                        name: item?.full_name,
+                        name: item?.name,
                       },
                     };
                   })
@@ -177,28 +274,33 @@ export default function LocationScreen() {
               >
                 <Text
                   className={`${
-                    location?.district?.name === item?.full_name
+                    location?.district?.name === item?.name
                       ? 'text-red-500'
                       : ''
                   }`}
                 >
-                  {item?.full_name}
+                  {item?.name}
                 </Text>
-                {location?.district?.name === item?.full_name && (
+                {location?.district?.name === item?.name && (
                   <Feather name='check' size={18} color='#ef4444' />
                 )}
               </Pressable>
             )}
-            keyExtractor={(item) => item.id}
-          ></FlatList>
-        </View>
+            onEndReached={loadMoreDistrict}
+            onEndReachedThreshold={0.1}
+            isLoading={isLoadingDistricts}
+            isPaginate={true}
+          />
+        </ScrollView>
       )}
-      <View>
+      <ScrollView
+        nestedScrollEnabled={true}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <Text className='p-4'>Phường/Xã</Text>
-        <FlatList
-          className='flex-col bg-white'
-          data={wardsData?.data}
-          renderItem={({ item }) => (
+        <ListItem
+          data={wards}
+          renderItem={({ item }: any) => (
             <Pressable
               className='p-4 border-b border-neutral-200 flex-row justify-between items-center'
               key={item?.id}
@@ -206,19 +308,22 @@ export default function LocationScreen() {
             >
               <Text
                 className={`${
-                  location?.ward?.name === item?.full_name ? 'text-red-500' : ''
+                  location?.ward?.name === item?.name ? 'text-red-500' : ''
                 }`}
               >
-                {item?.full_name}
+                {item?.name}
               </Text>
-              {location?.ward?.name === item?.full_name && (
+              {location?.ward?.name === item?.name && (
                 <Feather name='check' size={18} color='#ef4444' />
               )}
             </Pressable>
           )}
-          keyExtractor={(item) => item.id}
-        ></FlatList>
-      </View>
+          onEndReached={loadMoreWard}
+          onEndReachedThreshold={0.1}
+          isLoading={isLoadingWards}
+          isPaginate={true}
+        />
+      </ScrollView>
     </View>
   );
 }

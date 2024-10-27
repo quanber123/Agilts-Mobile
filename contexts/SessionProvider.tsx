@@ -41,13 +41,7 @@ type CTX = {
     email: string;
     password: string;
   }) => Promise<void>;
-  signOut: ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => Promise<void>;
+  signOut: () => Promise<void>;
   verify2Fa: (isCode: boolean, code: string) => Promise<void>;
   session: string | null;
   isLoadingSession: boolean;

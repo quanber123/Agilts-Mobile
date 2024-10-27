@@ -1,26 +1,25 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { axiosBaseQuery } from '../config/axios';
 export const countryApi = createApi({
   reducerPath: 'countryApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.EXPO_PUBLIC_API_COUNTRY as string,
-  }),
+  baseQuery: axiosBaseQuery(),
   endpoints: (builder) => {
     return {
       getProvinces: builder.query({
-        query: () => ({
-          url: `/1/0.htm`,
+        query: (page) => ({
+          url: `/api/province?page=${page}`,
           method: 'GET',
         }),
       }),
       getDistricts: builder.query({
-        query: (provinceCode) => ({
-          url: `/2/${provinceCode}.htm`,
+        query: ({ provinceCode, page }) => ({
+          url: `/api/district/${provinceCode}?page=${page}`,
           method: 'GET',
         }),
       }),
       getWards: builder.query({
-        query: (districtCode) => ({
-          url: `/3/${districtCode}.htm`,
+        query: ({ districtCode, page }) => ({
+          url: `/api/ward/${districtCode}?page=${page}`,
           method: 'GET',
         }),
       }),

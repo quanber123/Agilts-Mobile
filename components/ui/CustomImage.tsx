@@ -47,10 +47,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
   }
 
   return (
-    <View
-      className='flex-1 rounded-sm justify-center items-center'
-      style={[styles.loaderContainer, style]}
-    >
+    <View style={[styles.loaderContainer, style]}>
       {!loaded && <ActivityIndicator size='large' color='#ef4444' />}
       {src && (
         <Image
