@@ -33,7 +33,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
     setFailed(false);
   }, [src]);
 
-  if (failed) {
+  if (failed || src === null) {
     return (
       <View className='flex-1 rounded-sm justify-center items-center'>
         <Image

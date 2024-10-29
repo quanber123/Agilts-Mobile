@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -19,6 +20,7 @@ import {
 } from '@/services/redux/query/appQuery';
 import Toast from 'react-native-toast-message';
 import LoadingApp from '@/components/ui/LoadingApp';
+import { AlterContext } from '@/contexts/AlterProvider';
 
 type Props = {
   cart: Cart;
@@ -26,6 +28,8 @@ type Props = {
   handleCheck: (id: number) => void;
 };
 export default function CartItem({ cart, selectedKeys, handleCheck }: Props) {
+  const { setAlertModal, setIsAlertModal, setMessages } =
+    useContext(AlterContext);
   const [
     updateCart,
     {
@@ -78,18 +82,14 @@ export default function CartItem({ cart, selectedKeys, handleCheck }: Props) {
   }, [deleteCart]);
   useEffect(() => {
     if (isSuccessUpdate) {
-      Toast.show({
-        type: 'success',
-        text2: 'Cập nhật giỏ hàng thành công',
-        position: 'bottom',
-      });
+      setAlertModal('success');
+      setIsAlertModal(true);
+      setMessages('Cập nhật giỏ hàng thành công!');
     }
     if (errorUpdate) {
-      Toast.show({
-        type: 'error',
-        text2: (errorUpdate as any)?.data?.message,
-        position: 'bottom',
-      });
+      setAlertModal('success');
+      setIsAlertModal(true);
+      setMessages((errorUpdate as any)?.data?.message);
     }
   }, [isSuccessUpdate, errorUpdate]);
   if (isLoadingUpdate || isLoadingDelete) return <LoadingApp />;

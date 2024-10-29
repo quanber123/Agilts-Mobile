@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 
-export default function DeliveryScreen() {
+export default function PaymentScreen() {
   return (
     <Stack
       screenOptions={{
@@ -13,7 +13,7 @@ export default function DeliveryScreen() {
         name='index'
         options={{
           headerShown: true,
-          title: 'Phương thức vận chuyển',
+          title: 'Hệ thống cửa hàng',
           headerTitleAlign: 'center',
         }}
       />

@@ -15,6 +15,9 @@
       "distribution": "internal"
     },
     "preview": {
+      "android": {
+        "buildType": "apk"
+      },
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://backend.agilts.com",

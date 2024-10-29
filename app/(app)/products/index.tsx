@@ -1,8 +1,7 @@
-import { FlatList, Pressable, Text } from 'react-native';
+import { FlatList, Pressable, Text, SafeAreaView } from 'react-native';
 import React, { useMemo } from 'react';
 import { router } from 'expo-router';
 import { productsType } from '@/config/products_type';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProductsScreen() {
   const renderedProductsType = useMemo(() => {

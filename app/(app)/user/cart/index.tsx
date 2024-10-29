@@ -9,7 +9,6 @@ import React, {
 import { UserContext } from '@/contexts/UserProvider';
 import { FlatList, Pressable } from 'react-native-gesture-handler';
 import CartItem from './cart-item';
-import Toast from 'react-native-toast-message';
 import Checkbox from 'expo-checkbox';
 import { formatPrice } from '@/services/utils/format';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -51,9 +50,8 @@ export default function CartScreen() {
       }
     })();
   }, []);
-  return (
+  return cart?.length > 0 ? (
     <SafeAreaView className='flex-1'>
-      <Toast />
       <FlatList
         className='p-4'
         data={cart}
@@ -100,6 +98,12 @@ export default function CartScreen() {
             </Text>
           </Pressable>
         </View>
+      </View>
+    </SafeAreaView>
+  ) : (
+    <SafeAreaView className='flex-1'>
+      <View className='flex-1 justify-center items-center'>
+        <Text className='text-base font-bold'>Bạn chưa có sản phẩm!</Text>
       </View>
     </SafeAreaView>
   );

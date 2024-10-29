@@ -18,6 +18,7 @@ import {
 } from '@/services/redux/query/appQuery';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Toast from 'react-native-toast-message';
+import { AlterContext } from '@/contexts/AlterProvider';
 
 function SingleProduct({
   product,
@@ -26,6 +27,8 @@ function SingleProduct({
   product: Product;
   needFav?: boolean;
 }) {
+  const { setIsAlertModal, setAlertModal, setMessages } =
+    useContext(AlterContext);
   const [isPending, startTransition] = useTransition();
   const params = useLocalSearchParams();
   const { wishlist } = useContext(UserContext);
@@ -82,43 +85,30 @@ function SingleProduct({
   }, [createWishlist, deleteWishlist, selectedOption, favorite, product]);
   useEffect(() => {
     if (isSuccessCreate) {
-      Toast.show({
-        type: 'success',
-        text2: 'Thêm sản phẩm vào danh sách ước thành công!',
-        position: 'top',
-        topOffset: 60,
-      });
+      setAlertModal('success');
+      setIsAlertModal(true);
+      setMessages('Thêm sản phẩm vào danh sách ước thành công!');
     }
     if (isErrorCreate && errorCreate) {
-      Toast.show({
-        type: 'error',
-        text2: (errorCreate as any)?.data?.message,
-        position: 'top',
-        topOffset: 60,
-      });
+      setAlertModal('error');
+      setIsAlertModal(true);
+      setMessages((errorCreate as any)?.data?.message);
     }
   }, [isSuccessCreate, isErrorCreate, errorCreate]);
   useEffect(() => {
-    if (isErrorDelete) {
-      Toast.show({
-        type: 'success',
-        text2: 'Xóa sản phẩm vào danh sách ước thành công!',
-        position: 'top',
-        topOffset: 60,
-      });
+    if (isSuccessDelete) {
+      setAlertModal('success');
+      setIsAlertModal(true);
+      setMessages('Xóa sản phẩm vào danh sách ước thành công!');
     }
     if (isErrorDelete && errorDelete) {
-      Toast.show({
-        type: 'error',
-        text2: (errorDelete as any)?.data?.message,
-        position: 'top',
-        topOffset: 60,
-      });
+      setAlertModal('error');
+      setIsAlertModal(true);
+      setMessages((errorDelete as any)?.data?.message);
     }
   }, [isSuccessDelete, isErrorDelete, errorDelete]);
   return (
     <View className='flex-1 max-w-[45%] p-4 border border-neutral-100'>
-      <Toast />
       <View className='relative flex h-[180px] w-full items-center justify-center overflow-hidden'>
         {needFav && (
           <View className='absolute w-max h-max right-4 top-4 z-20'>

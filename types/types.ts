@@ -76,7 +76,7 @@ export type Address = {
 export type Branch = {
   id: number;
   name: string;
-  image: SingleImage;
+  image_preview: SingleImage;
   phone_number: number | string;
   address_detail: string;
   address_preview: string;
@@ -138,7 +138,7 @@ export type ProductOption = {
     {
       key: string;
       value: string;
-    }
+    },
   ];
   status_preview: string;
   type_preview: string;
@@ -177,7 +177,7 @@ export type Product = {
         id: string;
         url: string;
       };
-    }
+    },
   ];
   options: ProductOption[];
   reviews_avg_rate: string;
@@ -193,7 +193,7 @@ export type Product = {
       deleted_at: string;
       created_at: string;
       updated_at: string;
-    }
+    },
   ];
   enabled: boolean;
   visibility: string;
@@ -203,7 +203,7 @@ export type Product = {
     {
       key: string;
       value: string;
-    }
+    },
   ];
   deleted_at: string;
   created_at: string;
@@ -233,7 +233,7 @@ export type ProductDetails = Product & {
       {
         key: string;
         value: number;
-      }
+      },
     ];
     created_at: string;
     updated_at: string;
@@ -358,7 +358,7 @@ export type Cart = {
       {
         title: string;
         description: string;
-      }
+      },
     ];
     product: Product;
     deleted_at: string;
@@ -396,7 +396,7 @@ export type Wishlist = {
       {
         title: string;
         description: string;
-      }
+      },
     ];
     product: Product;
     deleted_at: string;
@@ -424,7 +424,7 @@ export type BannerPage = {
             title: string;
             link: string;
           };
-        }
+        },
       ]
     | boolean
     | number;
@@ -525,7 +525,7 @@ export type Order = {
       {
         title: string;
         description: string;
-      }
+      },
     ];
     product: {
       id: number;
@@ -545,7 +545,7 @@ export type Order = {
             };
             url: string;
           };
-        }
+        },
       ];
       published: true;
       visibility_preview: string;
@@ -555,7 +555,7 @@ export type Order = {
         {
           title: string;
           description: string;
-        }
+        },
       ];
       categories: [
         {
@@ -571,7 +571,7 @@ export type Order = {
             product_id: number;
             category_id: number;
           };
-        }
+        },
       ];
       deleted_at: string;
       created_at: string;
@@ -619,7 +619,7 @@ export type Order = {
           {
             title: string;
             description: string;
-          }
+          },
         ];
         product: {
           id: number;
@@ -639,7 +639,7 @@ export type Order = {
                 };
                 url: string;
               };
-            }
+            },
           ];
           published: true;
           visibility_preview: string;
@@ -649,7 +649,7 @@ export type Order = {
             {
               title: string;
               description: string;
-            }
+            },
           ];
           categories: [
             {
@@ -665,7 +665,7 @@ export type Order = {
                 product_id: number;
                 category_id: number;
               };
-            }
+            },
           ];
           deleted_at: string;
           created_at: string;
@@ -675,7 +675,7 @@ export type Order = {
         created_at: string;
         updated_at: string;
       };
-    }
+    },
   ];
   address: Address;
   identification: Document;
@@ -690,7 +690,7 @@ export type Order = {
       };
       created_at: string;
       updated_at: string;
-    }
+    },
   ];
   created_at: string;
   updated_at: string;

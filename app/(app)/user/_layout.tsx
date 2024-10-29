@@ -53,6 +53,14 @@ const UserLayout = () => {
             }}
           />
           <Stack.Screen
+            name='wishlist/index'
+            options={{
+              headerTitle: 'Danh sách mong muốn',
+              headerTitleAlign: 'center',
+              headerShown: true,
+            }}
+          />
+          <Stack.Screen
             name='order/item/index'
             options={{
               headerTitle: 'Đơn mua phụ tùng/phụ kiện',

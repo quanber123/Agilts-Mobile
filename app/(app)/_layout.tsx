@@ -81,12 +81,12 @@ export default function TabLayout() {
             }}
           />
           <Tabs.Screen
-            name='services'
+            name='stores'
             options={{
-              title: 'Dịch vụ',
+              title: 'Hệ thống cửa hàng',
               tabBarIcon: ({ color, focused }: any) => (
                 <TabBarIcon
-                  name={focused ? 'construct' : 'construct-outline'}
+                  name={focused ? 'settings' : 'settings-outline'}
                   color={color}
                 />
               ),

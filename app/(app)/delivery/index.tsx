@@ -1,6 +1,5 @@
-import { Text, View } from 'react-native';
+import { Text, View, SafeAreaView } from 'react-native';
 import React, { useContext } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pressable, ScrollView } from 'react-native-gesture-handler';
 import ListItem from '@/components/ui/ListItem';
 import { UserContext } from '@/contexts/UserProvider';

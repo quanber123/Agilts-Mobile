@@ -38,7 +38,7 @@ function ListItem({
       numColumns={numColumns}
       columnWrapperStyle={effectiveColumnWrapperStyle}
       contentContainerStyle={{ gap: contentContainerStyle }}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => item.id.toString() + `${new Date().getTime()}`}
       onEndReached={isPaginate ? onEndReached : undefined}
       onEndReachedThreshold={onEndReachedThreshold}
       ListFooterComponent={
