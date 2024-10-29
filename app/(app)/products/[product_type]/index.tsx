@@ -65,7 +65,7 @@ export default function ProductTypeScreen() {
           isLoading={isFetchingProduct}
         />
       )}
-      {products?.length === 0 && (
+      {!isFetchingProduct && products?.length === 0 && (
         <View className='flex-1 justify-center items-center'>
           <Text className='text-xl font-bold'>Không có sản phẩm!</Text>
         </View>

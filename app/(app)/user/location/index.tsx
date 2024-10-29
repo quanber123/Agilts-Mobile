@@ -10,6 +10,7 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ScrollView } from 'react-native';
 import ListItem from '@/components/ui/ListItem';
+import { ProvinceContext } from '@/contexts/ProvinceProvider';
 export default function LocationScreen() {
   const router = useRouter();
   const {
@@ -19,20 +20,14 @@ export default function LocationScreen() {
     typeActionLocation,
     setTypeActionLocation,
   } = useContext(LocationContext);
-  const [provinces, setProvinces] = useState<any[]>([]);
-  const [curPageProvince, setCurPageProvince] = useState(1);
-  const [hasMoreProvince, setHasMoreProvince] = useState(true);
+  const { provinces, isLoadingProvince, loadMoreProvince } =
+    useContext(ProvinceContext);
   const [districts, setDistricts] = useState<any[]>([]);
   const [curPageDistrict, setCurPageDistrict] = useState(1);
   const [hasMoreDistrict, setHasMoreDistrict] = useState(true);
   const [wards, setWards] = useState<any[]>([]);
   const [curPageWard, setCurPageWard] = useState(1);
   const [hasMoreWard, setHasMoreWard] = useState(true);
-  const {
-    data: provinceData,
-    isFetching: isLoadingProvince,
-    isSuccess: isSuccessProvince,
-  } = useGetProvincesQuery(curPageProvince);
   const {
     data: districtsData,
     isFetching: isLoadingDistricts,
@@ -52,32 +47,6 @@ export default function LocationScreen() {
     { districtCode: location.district.code, page: curPageWard },
     { skip: !location.district.code, refetchOnReconnect: true }
   );
-  const loadMoreProvince = useCallback(() => {
-    if (hasMoreProvince && !isLoadingProvince && isSuccessProvince) {
-      setHasMoreProvince(true);
-      setCurPageProvince((prevPage) => prevPage + 1);
-    }
-  }, [hasMoreProvince, isLoadingProvince, isSuccessProvince]);
-  useEffect(() => {
-    if (
-      !isLoadingProvince &&
-      isSuccessProvince &&
-      provinceData &&
-      hasMoreProvince
-    ) {
-      if (provinceData?.data?.length === 0) {
-        setProvinces((prevProvinces) => [...prevProvinces]);
-      } else {
-        setProvinces((prevProvinces) => [
-          ...prevProvinces,
-          ...provinceData?.data,
-        ]);
-      }
-      if (curPageProvince + 1 > provinceData?.total_pages) {
-        setHasMoreProvince(false);
-      }
-    }
-  }, [isLoadingProvince, isLoadingProvince, provinceData, hasMoreProvince]);
   const loadMoreDistrict = useCallback(() => {
     if (hasMoreDistrict && !isLoadingDistricts && isSuccessDistrict) {
       setCurPageDistrict((prevPage) => prevPage + 1);
@@ -102,7 +71,7 @@ export default function LocationScreen() {
         setHasMoreDistrict(false);
       }
     }
-  }, [isLoadingDistricts, isLoadingProvince, districtsData, hasMoreDistrict]);
+  }, [isLoadingDistricts, districtsData, hasMoreDistrict]);
   const loadMoreWard = useCallback(() => {
     if (hasMoreWard && !isLoadingWards && isSuccessWard) {
       setCurPageWard((prevPage) => prevPage + 1);
@@ -140,8 +109,8 @@ export default function LocationScreen() {
   );
   useEffect(() => {
     if (typeActionLocation === 'update') {
-      if (provinceData) {
-        const curProvince = provinceData?.data?.find((d: any) => {
+      if (provinces) {
+        const curProvince = provinces?.find((d: any) => {
           return d?.name === location?.province?.name;
         });
         if (curProvince) {
@@ -173,7 +142,7 @@ export default function LocationScreen() {
         }
       }
     }
-  }, [typeActionLocation, provinceData, districtsData]);
+  }, [typeActionLocation, provinces, districtsData]);
 
   return (
     <View>

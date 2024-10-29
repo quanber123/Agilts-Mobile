@@ -3,14 +3,25 @@
     "version": ">= 7.0.0"
   },
   "build": {
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://backend.agilts.com",
+        "EXPO_PUBLIC_API_COUNTRY": "https://esgoo.net/api-tinhthanh",
+        "EXPO_PUBLIC_APP_NAME": "Agilts"
+      }
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
-    },
-    "production": {}
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://backend.agilts.com",
+        "EXPO_PUBLIC_API_COUNTRY": "https://esgoo.net/api-tinhthanh",
+        "EXPO_PUBLIC_APP_NAME": "Agilts"
+      }
+    }
   },
   "submit": {
     "production": {}

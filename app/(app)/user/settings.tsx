@@ -1,12 +1,6 @@
-import { useSession } from '@/contexts/SessionProvider';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useRouter } from 'expo-router';
 export default function SettingsScreen() {
   return (
     <SafeAreaView>

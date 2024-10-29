@@ -66,7 +66,7 @@ export default function UserScreen() {
       </Pressable>
       <Pressable
         className='p-4 border-b border-neutral-300 flex-row justify-between items-center'
-        onPress={() => router.push('/user/address')}
+        onPress={() => router.push('/user/addresses')}
       >
         <View className='w-full flex-row items-center gap-x-2'>
           <Ionicons name='location-outline' size={24} color='#eab308' />

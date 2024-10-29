@@ -4,7 +4,15 @@ import { axiosBaseQuery } from '../config/axios';
 export const appApi = createApi({
   reducerPath: 'appApi',
   baseQuery: axiosBaseQuery(),
-  tagTypes: ['address', 'document', 'wishlist', 'cart'],
+  tagTypes: [
+    'address',
+    'document',
+    'wishlist',
+    'cart',
+    'branch',
+    'order-motor-cycle',
+    'order-item',
+  ],
   endpoints: (builder) => {
     return {
       getCSRFCookie: builder.mutation({
@@ -239,6 +247,71 @@ export const appApi = createApi({
           method: 'GET',
         }),
       }),
+      getBranches: builder.query({
+        query: (search) => ({
+          url: `/api/branch?${search ? search : ''}`,
+          method: 'GET',
+        }),
+        providesTags: ['branch'],
+      }),
+      postPriceQuote: builder.mutation({
+        query: ({ type, body }) => ({
+          url: `/api/${type}`,
+          method: 'POST',
+          data: body,
+        }),
+      }),
+      getOrdersMotorcycle: builder.query({
+        query: (search) => ({
+          url: `/api/order-motorcycle?${search}`,
+          method: 'POST',
+        }),
+        providesTags: ['order-motor-cycle'],
+      }),
+      createOrderMotorcycle: builder.mutation({
+        query: (body) => ({
+          url: `/api/order-motorcycle`,
+          method: 'POST',
+          data: body,
+        }),
+        invalidatesTags: ['order-motor-cycle'],
+      }),
+      getOrderMotorcycleDetails: builder.query({
+        query: (id) => ({
+          url: `/api/order-motorcycle/${id}`,
+          method: 'GET',
+        }),
+        providesTags: ['order-motor-cycle'],
+      }),
+      getOrders: builder.query({
+        query: (search) => ({
+          url: `/api/order?${search}`,
+          method: 'POST',
+        }),
+        providesTags: ['order-item'],
+      }),
+      createOrder: builder.mutation({
+        query: (body) => ({
+          url: `/api/order`,
+          method: 'POST',
+          data: body,
+        }),
+        invalidatesTags: ['order-item'],
+      }),
+      getOrderDetails: builder.query({
+        query: (id) => ({
+          url: `/api/order/${id}`,
+          method: 'GET',
+        }),
+        providesTags: ['order-item'],
+      }),
+      cancelOrder: builder.mutation({
+        query: (id) => ({
+          url: `/api/order/${id}`,
+          method: 'DELETE',
+        }),
+        invalidatesTags: ['order-item'],
+      }),
     };
   },
 });
@@ -277,4 +350,13 @@ export const {
   useGetProductsQuery,
   useGetProductDetailQuery,
   useGetProductReviewsQuery,
+  useGetBranchesQuery,
+  usePostPriceQuoteMutation,
+  useGetOrdersMotorcycleQuery,
+  useCreateOrderMotorcycleMutation,
+  useGetOrderMotorcycleDetailsQuery,
+  useGetOrdersQuery,
+  useCreateOrderMutation,
+  useGetOrderDetailsQuery,
+  useCancelOrderMutation,
 } = appApi;

@@ -1,19 +1,30 @@
 import React from 'react';
-import { Tabs } from 'expo-router';
+import { Stack } from 'expo-router';
 import { OptionMotorProvider } from './motor-cycle/OptionMotorProvider';
+import { BranchProvider } from '@/contexts/BranchProvider';
 
-export default function ProductTypeLayout() {
+export default function OrderScreen() {
   return (
-    <Tabs
-      screenOptions={{
-        headerStyle: { backgroundColor: '#ef4444' },
-        headerTintColor: 'white',
-      }}
-    >
-      <Tabs.Screen name='item' options={{ headerShown: false }} />
+    <BranchProvider>
       <OptionMotorProvider>
-        <Tabs.Screen name='motor-cycle' options={{ headerShown: false }} />
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: '#ef4444' },
+            headerTintColor: 'white',
+          }}
+        >
+          <Stack.Screen name='item' options={{ headerShown: false }} />
+          <Stack.Screen name='motor-cycle' options={{ headerShown: false }} />
+          <Stack.Screen
+            name='success/[id]/index'
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='cancel/[id]/index'
+            options={{ headerShown: false }}
+          />
+        </Stack>
       </OptionMotorProvider>
-    </Tabs>
+    </BranchProvider>
   );
 }

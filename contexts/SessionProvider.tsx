@@ -20,6 +20,7 @@ import { setUser, userState } from '@/services/redux/slice/userSlice';
 import { User } from '@/types/types';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
+import { AlterContext } from './AlterProvider';
 type CTX = {
   user: User | null;
   getUser: () => Promise<void>;
@@ -72,6 +73,8 @@ type ErrorResponse = {
   message: string;
 };
 export function SessionProvider({ children }: PropsWithChildren) {
+  const { setAlertModal, setIsAlertModal, setMessages } =
+    useContext(AlterContext);
   const [[isLoadingSession, session], setSession] =
     useStorageState('x-user-session');
   const user = useSelector(userState);
@@ -202,12 +205,9 @@ export function SessionProvider({ children }: PropsWithChildren) {
     if (isSuccessRegister && registerData) {
       setSession(registerData?.token);
       setErrorResponse(null);
-      Toast.show({
-        type: 'success',
-        text2: 'Đăng ký thành công!',
-        position: 'top',
-        topOffset: 60,
-      });
+      setAlertModal('success');
+      setIsAlertModal(true);
+      setMessages('Đăng ký thành công!');
     }
     if (isErrorRegister && errorRegister) {
       const error = errorRegister as any;

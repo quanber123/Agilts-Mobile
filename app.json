@@ -5,8 +5,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/favicon-32x32.png",
-    "scheme": "myapp",
+    "scheme": "agilts",
     "userInterfaceStyle": "automatic",
+    "platforms": ["ios", "android", "web"],
     "splash": {
       "image": "./assets/images/splash_screens/splash.png",
       "resizeMode": "contain",
@@ -33,9 +34,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon-32x32.png"
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
     },

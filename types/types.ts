@@ -74,11 +74,13 @@ export type Address = {
 };
 
 export type Branch = {
-  id: number | string;
+  id: number;
   name: string;
   image: SingleImage;
   phone_number: number | string;
-  address: Address;
+  address_detail: string;
+  address_preview: string;
+  country: string;
   deleted_at: string;
   created_at: string;
   updated_at: string;
@@ -97,13 +99,6 @@ export type Document = {
   created_at: string;
   updated_at: string;
 };
-
-// export type Social = {
-//   [key: string]: {
-//     name: string;
-//     element: SvelteComponent;
-//   };
-// };
 export type SocialProvider = {
   id: number;
   customer_id: number;

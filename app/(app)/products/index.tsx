@@ -1,4 +1,4 @@
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Pressable, Text } from 'react-native';
 import React, { useMemo } from 'react';
 import { router } from 'expo-router';
 import { productsType } from '@/config/products_type';

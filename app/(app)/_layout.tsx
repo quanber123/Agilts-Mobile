@@ -7,6 +7,8 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { useSession } from '@/contexts/SessionProvider';
 import { View } from 'react-native';
 import { Image } from 'expo-image';
+import { PaymentProvider } from '@/contexts/PaymentProvider';
+import { DeliveryProvider } from '@/contexts/DeliveryProvider';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -46,67 +48,85 @@ export default function TabLayout() {
     return <Redirect href='/sign-in' />;
   }
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}
-    >
-      <Tabs.Screen
-        name='index'
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'home' : 'home-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='products'
-        options={{
-          title: 'Sản phẩm',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'storefront' : 'storefront-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='services'
-        options={{
-          title: 'Dịch vụ',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'construct' : 'construct-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='user'
-        options={{
-          title: 'Tôi',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'person-circle' : 'person-circle-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='order'
-        options={{
-          headerShown: false,
-          tabBarButton: () => null,
-        }}
-      />
-    </Tabs>
+    <DeliveryProvider>
+      <PaymentProvider>
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+            headerShown: false,
+          }}
+        >
+          <Tabs.Screen
+            name='index'
+            options={{
+              title: 'Home',
+              tabBarIcon: ({ color, focused }: any) => (
+                <TabBarIcon
+                  name={focused ? 'home' : 'home-outline'}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='products'
+            options={{
+              title: 'Sản phẩm',
+              tabBarIcon: ({ color, focused }: any) => (
+                <TabBarIcon
+                  name={focused ? 'storefront' : 'storefront-outline'}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='services'
+            options={{
+              title: 'Dịch vụ',
+              tabBarIcon: ({ color, focused }: any) => (
+                <TabBarIcon
+                  name={focused ? 'construct' : 'construct-outline'}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='user'
+            options={{
+              title: 'Tôi',
+              tabBarIcon: ({ color, focused }: any) => (
+                <TabBarIcon
+                  name={focused ? 'person-circle' : 'person-circle-outline'}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='order'
+            options={{
+              headerShown: false,
+              tabBarButton: () => null,
+            }}
+          />
+          <Tabs.Screen
+            name='delivery'
+            options={{
+              headerShown: false,
+              tabBarButton: () => null,
+            }}
+          />
+          <Tabs.Screen
+            name='payments'
+            options={{
+              headerShown: false,
+              tabBarButton: () => null,
+            }}
+          />
+        </Tabs>
+      </PaymentProvider>
+    </DeliveryProvider>
   );
 }

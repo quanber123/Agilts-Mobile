@@ -47,7 +47,6 @@ export default function ProductTabs({
     id: params?.id,
     search: queryString,
   });
-  console.log(reviewsData);
   const loadMore = useCallback(() => {
     if (hasMore && !isFetchingReview) {
       setCurPage((prevPage) => prevPage + 1);

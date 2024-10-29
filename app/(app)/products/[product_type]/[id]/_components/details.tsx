@@ -1,13 +1,14 @@
 import { View, Text, Pressable } from 'react-native';
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
   useTransition,
 } from 'react';
 import { Product, ProductOption } from '@/types/types';
-import { router, useLocalSearchParams } from 'expo-router';
+import { Href, router, useLocalSearchParams } from 'expo-router';
 import { useCreateCartMutation } from '@/services/redux/query/appQuery';
 import { FlatList } from 'react-native-gesture-handler';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -16,9 +17,13 @@ import Toast from 'react-native-toast-message';
 import { CustomInput } from '@/components/ui/CustomInput';
 import Entypo from '@expo/vector-icons/Entypo';
 import CustomImage from '@/components/ui/CustomImage';
+import { AlterContext } from '@/contexts/AlterProvider';
+import LoadingApp from '@/components/ui/LoadingApp';
 
 export default function DetailsSection({ product }: { product: Product }) {
   const { product_type, type, version, color, volume } = useLocalSearchParams();
+  const { setAlertModal, setIsAlertModal, setMessages } =
+    useContext(AlterContext);
   const [isPending, startTransition] = useTransition();
   const [addCart, { isSuccess, isLoading, isError, error }] =
     useCreateCartMutation();
@@ -147,6 +152,12 @@ export default function DetailsSection({ product }: { product: Product }) {
       )
     );
   }, [product?.options, curType, curVersion]);
+  const handleAddCart = useCallback(async () => {
+    await addCart({
+      option_id: selectedOption?.id,
+      amount: quantity,
+    });
+  }, [selectedOption, quantity, addCart]);
   const handleOrderNow = useCallback(async () => {
     if (product_type === 'motor-cycle') {
       await AsyncStorage.setItem(
@@ -161,33 +172,34 @@ export default function DetailsSection({ product }: { product: Product }) {
         amount: quantity,
       });
     }
-  }, [AsyncStorage, selectedOption, router, quantity, addCart]);
+  }, [selectedOption, router, quantity, addCart]);
   useEffect(() => {
     if (isSuccess && isBuyNow) {
-      setIsBuyNow(false);
-      router.push(
-        `/order/item?state=${encodeURIComponent(
+      (async () => {
+        await AsyncStorage.setItem(
+          'order_now_item',
           JSON.stringify([selectedOption?.id])
-        )}`
-      );
+        );
+        router.push(
+          `/order/item?state=${encodeURIComponent(
+            JSON.stringify([selectedOption?.id])
+          )}`
+        );
+        setIsBuyNow(false);
+      })();
     }
     if (isSuccess && !isBuyNow) {
-      Toast.show({
-        type: 'success',
-        text2: 'Thêm sản phẩm vào giỏ hàng thành công!',
-        position: 'top',
-        topOffset: 60,
-      });
+      setAlertModal('success');
+      setIsAlertModal(true);
+      setMessages('Thêm giỏ hàng thành công!');
     }
     if (isError && error) {
-      Toast.show({
-        type: 'error',
-        text2: (error as any)?.data?.message,
-        position: 'top',
-        topOffset: 60,
-      });
+      setAlertModal('error');
+      setIsAlertModal(true);
+      setMessages((error as any)?.data?.message);
     }
-  }, [isSuccess, router, isError, error]);
+  }, [isSuccess, router, isError, error, selectedOption]);
+  if (isPending || isLoading) return <LoadingApp />;
   return (
     <View className='flex-col'>
       <View className='w-full flex-row justify-center items-center border border-neutral-300 mb-4'>
@@ -295,7 +307,7 @@ export default function DetailsSection({ product }: { product: Product }) {
                       key={item?.id}
                       onPress={() =>
                         router.push(
-                          `/products/${product.type_preview}?category=${item?.id}`
+                          `/products/${product.type_preview}?category=${item?.id}` as Href<string>
                         )
                       }
                     >
@@ -493,6 +505,20 @@ export default function DetailsSection({ product }: { product: Product }) {
             >
               <Entypo name='plus' size={24} color='black' />
             </Pressable>
+            <Pressable
+              disabled={isPending || isLoading}
+              onPress={() =>
+                startTransition(() => {
+                  handleAddCart;
+                })
+              }
+              className='ml-4 border border-red-500 flex-row items-center justify-center px-4'
+            >
+              {<AntDesign name='shoppingcart' size={24} color='#ef4444' />}
+              <Text className='mx-2 text-red-500 text-center font-bold'>
+                Thêm giỏ hàng
+              </Text>
+            </Pressable>
           </View>
         )}
         <Pressable
@@ -504,7 +530,9 @@ export default function DetailsSection({ product }: { product: Product }) {
             })
           }
         >
-          <AntDesign name='shoppingcart' size={24} color='white' />
+          {product_type === 'motor-cycle' && (
+            <AntDesign name='shoppingcart' size={24} color='white' />
+          )}
           <Text className='mx-4 text-white text-center font-bold'>
             Đặt ngay
           </Text>

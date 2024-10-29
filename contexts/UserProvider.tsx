@@ -12,9 +12,10 @@ import {
   useGetCartQuery,
   useGetWishlistQuery,
 } from '@/services/redux/query/appQuery';
+import { Href } from 'expo-router';
 
 type CTX = {
-  previousRoute: string | null;
+  previousRoute: Href<string>;
   wishlist: Wishlist[] | [];
   isFetchingWishlist: boolean;
   cart: Cart[] | [];
@@ -23,12 +24,13 @@ type CTX = {
   isFetchingAddress: boolean;
   defaultAddress: Address | null;
   setDefaultAddress: Dispatch<SetStateAction<Address | null>>;
+  setPreviousRoute: Dispatch<SetStateAction<Href<string>>>;
 };
 
 export const UserContext = createContext({} as CTX);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [previousRoute, setPreviousRoute] = useState<string | null>(null);
+  const [previousRoute, setPreviousRoute] = useState<Href<string>>('/');
   const { user } = useSession();
   const [wishlist, setWishlist] = useState<Wishlist[] | []>([]);
   const [cart, setCart] = useState<Cart[] | []>([]);
@@ -39,7 +41,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     isFetching: isFetchingWishlist,
     isSuccess: isSuccessWishlist,
   } = useGetWishlistQuery(null, { skip: !user });
-  console.log(wishlistData);
   const {
     data: cartData,
     isFetching: isFetchingCart,

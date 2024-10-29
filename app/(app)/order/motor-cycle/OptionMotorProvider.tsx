@@ -3,19 +3,23 @@ import {
   registration_options,
 } from '@/constants/Config';
 import { Branch } from '@/types/types';
-import { type PropsWithChildren, createContext, useState } from 'react';
+import {
+  Dispatch,
+  type PropsWithChildren,
+  SetStateAction,
+  createContext,
+  useState,
+} from 'react';
 
 type Option = { label: string; value: number };
 
 type CTX = {
   branchOption: Branch | null;
-  setBranchOption: React.Dispatch<React.SetStateAction<Branch | null>>;
+  setBranchOption: Dispatch<SetStateAction<Branch | null>>;
   registrationOptions: Option;
-  setRegistrationOptions: React.Dispatch<React.SetStateAction<Option>>;
+  setRegistrationOptions: Dispatch<SetStateAction<Option>>;
   licensePlateRegistrationOption: Option;
-  setLicensePlateRegistrationOption: React.Dispatch<
-    React.SetStateAction<Option>
-  >;
+  setLicensePlateRegistrationOption: Dispatch<SetStateAction<Option>>;
 };
 
 export const OptionMotorContext = createContext<CTX>({} as CTX);

@@ -22,10 +22,10 @@ import LoadingApp from '@/components/ui/LoadingApp';
 
 type Props = {
   cart: Cart;
-  selctedKeys: number[];
+  selectedKeys: number[];
   handleCheck: (id: number) => void;
 };
-export default function CartItem({ cart, selctedKeys, handleCheck }: Props) {
+export default function CartItem({ cart, selectedKeys, handleCheck }: Props) {
   const [
     updateCart,
     {
@@ -41,10 +41,10 @@ export default function CartItem({ cart, selctedKeys, handleCheck }: Props) {
     return quantity !== cart?.amount;
   }, [cart, quantity]);
   const ischeck = useMemo(() => {
-    const valid = selctedKeys?.find((k) => k === cart?.id);
+    const valid = selectedKeys?.find((k) => k === cart?.option?.id);
     if (valid) return true;
     return false;
-  }, [selctedKeys]);
+  }, [selectedKeys]);
   const handleDecreaseQuantity = useCallback(() => {
     setQuantity((prevQuantity) => {
       if (prevQuantity - 1 < 1) {
@@ -97,7 +97,7 @@ export default function CartItem({ cart, selctedKeys, handleCheck }: Props) {
     <View style={styles.container}>
       <Checkbox
         value={ischeck}
-        onValueChange={() => handleCheck(cart?.id)}
+        onValueChange={() => handleCheck(cart?.option?.id)}
         color={ischeck ? '#ef4444' : undefined}
       />
       <View style={styles.item}>

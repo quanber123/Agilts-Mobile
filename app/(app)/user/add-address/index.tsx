@@ -13,7 +13,9 @@ import { defaultCountry } from '@/constants/Config';
 import { useRouter } from 'expo-router';
 import { LocationContext } from '../contexts/LocationProvider';
 import { CustomInput } from '@/components/ui/CustomInput';
+import { UserContext } from '@/contexts/UserProvider';
 export default function AddAddressScreen() {
+  const { previousRoute } = useContext(UserContext);
   const router = useRouter();
   const { location, setTypeActionLocation, resetLocation } =
     useContext(LocationContext);
@@ -61,7 +63,7 @@ export default function AddAddressScreen() {
   }, [createAddress, contact, settings, location, addressDetails]);
   useEffect(() => {
     if (isSuccessCreate) {
-      router.back();
+      router.push(previousRoute !== '/' ? previousRoute : '/user/addresses');
       resetLocation();
       setTypeActionLocation(null);
     }
@@ -137,14 +139,19 @@ export default function AddAddressScreen() {
                 <Text className='text-neutral-800'>{location.ward.name}</Text>
               </Pressable>
             )}
-          {errors?.errors?.district && (
+          {errors?.errors?.province_id && (
             <Text className='px-4 py-2 text-red-500 font-semibold'>
-              {errors?.errors?.district?.[0]}
+              {errors?.errors?.province_id?.[0]}
             </Text>
           )}
-          {errors?.errors?.province && (
+          {errors?.errors?.district_id && (
             <Text className='px-4 py-2 text-red-500 font-semibold'>
-              {errors?.errors?.province?.[0]}
+              {errors?.errors?.district_id?.[0]}
+            </Text>
+          )}
+          {errors?.errors?.ward_id && (
+            <Text className='px-4 py-2 text-red-500 font-semibold'>
+              {errors?.errors?.ward_id?.[0]}
             </Text>
           )}
           <TextInput
