@@ -9,6 +9,7 @@ import CustomImage from '@/components/ui/CustomImage';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Feather from '@expo/vector-icons/Feather';
 import smallError from '../../../assets/images/not-found-img.avif';
+import { Image } from 'expo-image';
 
 export default function StoresScreen() {
   const params = useLocalSearchParams();
@@ -54,14 +55,20 @@ export default function StoresScreen() {
                 className='flex-1 max-w-[45%] flex-col gap-1'
               >
                 <View>
-                  <CustomImage
-                    src={
-                      item?.image_preview?.url
-                        ? item?.image_preview?.url
-                        : smallError
-                    }
-                    alt={item?.image_preview?.alt}
-                  />
+                  {item?.image_preview?.url ? (
+                    <CustomImage
+                      width={200}
+                      height={120}
+                      src={item?.image_preview?.url}
+                      alt={item?.image_preview?.alt}
+                    />
+                  ) : (
+                    <Image
+                      className='w-[200px] h-[120px] object-cover'
+                      source={smallError}
+                      alt='error-img'
+                    />
+                  )}
                 </View>
                 <View className='flex-row items-center gap-1'>
                   <EvilIcons name='location' size={24} color='#ef4444' />

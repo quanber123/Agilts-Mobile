@@ -59,7 +59,9 @@ export default function TabLayout() {
           <Tabs.Screen
             name='index'
             options={{
-              title: 'Home',
+              title: 'Trang chủ',
+              headerTitleAlign: 'center',
+              headerShown: true,
               tabBarIcon: ({ color, focused }: any) => (
                 <TabBarIcon
                   name={focused ? 'home' : 'home-outline'}

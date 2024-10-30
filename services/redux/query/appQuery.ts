@@ -12,6 +12,7 @@ export const appApi = createApi({
     'branch',
     'order-motor-cycle',
     'order-item',
+    'settings',
   ],
   endpoints: (builder) => {
     return {
@@ -230,8 +231,8 @@ export const appApi = createApi({
         }),
       }),
       getProducts: builder.query({
-        query: ({ type, search }) => ({
-          url: `/api/product/${type}?perPage=16&${search ? search : ''}`,
+        query: ({ type, search, perPage }) => ({
+          url: `/api/product/${type}?perPage=${perPage ? perPage : 16}&${search ? search : ''}`,
           method: 'GET',
         }),
       }),
@@ -312,6 +313,13 @@ export const appApi = createApi({
         }),
         invalidatesTags: ['order-item'],
       }),
+      getSettings: builder.query({
+        query: (type) => ({
+          url: `/api/setting/${type}`,
+          method: 'GET',
+        }),
+        providesTags: ['settings'],
+      }),
     };
   },
 });
@@ -359,4 +367,5 @@ export const {
   useCreateOrderMutation,
   useGetOrderDetailsQuery,
   useCancelOrderMutation,
+  useGetSettingsQuery,
 } = appApi;
