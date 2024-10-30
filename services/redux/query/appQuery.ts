@@ -13,6 +13,7 @@ export const appApi = createApi({
     'order-motor-cycle',
     'order-item',
     'settings',
+    'invoice',
   ],
   endpoints: (builder) => {
     return {
@@ -265,7 +266,7 @@ export const appApi = createApi({
       getOrdersMotorcycle: builder.query({
         query: (search) => ({
           url: `/api/order-motorcycle?${search}`,
-          method: 'POST',
+          method: 'GET',
         }),
         providesTags: ['order-motor-cycle'],
       }),
@@ -320,6 +321,13 @@ export const appApi = createApi({
         }),
         providesTags: ['settings'],
       }),
+      getInvoice: builder.query({
+        query: ({ type, id }) => ({
+          url: `/invoice/${type}/${id}`,
+          method: 'GET',
+        }),
+        providesTags: ['invoice'],
+      }),
     };
   },
 });
@@ -368,4 +376,5 @@ export const {
   useGetOrderDetailsQuery,
   useCancelOrderMutation,
   useGetSettingsQuery,
+  useGetInvoiceQuery,
 } = appApi;

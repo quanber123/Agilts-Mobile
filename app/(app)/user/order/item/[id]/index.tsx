@@ -4,7 +4,7 @@ import {
   useCancelOrderMutation,
   useGetOrderDetailsQuery,
 } from '@/services/redux/query/appQuery';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import LoadingApp from '@/components/ui/LoadingApp';
 import { statusOrder } from '@/config/status_order';
 import ListItem from '@/components/ui/ListItem';
@@ -163,6 +163,14 @@ export default function OrderDetails() {
             <Text className='font-medium'>Phương thức thanh toán</Text>
             <Text>{data?.payment_method_preview}</Text>
           </View>
+        </View>
+        <View className='flex-row justify-end p-2'>
+          <Pressable
+            disabled={isLoadingCancel}
+            onPress={() => router.push(`/user/order/invoice/item/${data?.id}`)}
+          >
+            <Text className='text-blue-500 font-bold'>Xem hóa đơn</Text>
+          </Pressable>
         </View>
       </ScrollView>
       <View className='py-4 flex-row items-center justify-end gap-x-4'>

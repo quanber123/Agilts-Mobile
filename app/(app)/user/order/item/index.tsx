@@ -57,7 +57,7 @@ export default function UserOrderItemScreen() {
                     <View key={o?.id} className='gap-2'>
                       <View className='justify-between items-center flex-row'>
                         <Text className='font-bold'>
-                          Phương thức thanh toán: {item?.payment_method_preview}
+                          {item?.payment_method_preview}
                         </Text>
                         <Text
                           style={{ borderColor: s?.color, color: s?.color }}

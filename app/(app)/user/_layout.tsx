@@ -67,6 +67,10 @@ const UserLayout = () => {
             }}
           />
           <Stack.Screen
+            name='order/invoice'
+            options={{ headerShown: true, title: 'Hóa đơn' }}
+          />
+          <Stack.Screen
             name='order/motor-cycle'
             options={{
               headerShown: false,
