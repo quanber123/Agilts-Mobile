@@ -1,60 +1,81 @@
 import { View, Text, SafeAreaView, TextInput, Pressable } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { router, useLocalSearchParams } from 'expo-router';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import {
   useGetProductFilterQuery,
   useGetProductsQuery,
 } from '@/services/redux/query/appQuery';
-import { formatQueryToString } from '@/services/utils/format';
 import SingleProduct from '@/components/ui/SingleProduct';
 import { Product } from '@/types/types';
 import ListItem from '@/components/ui/ListItem';
 import FilterDialog from './components/FilterDialog';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { ParamsContext } from './ParamsProvider';
 
 export default function ProductTypeScreen() {
-  const params = useLocalSearchParams();
+  const urlParams = useLocalSearchParams();
+  const { params, setParams } = useContext(ParamsContext);
   const [searchValue, setSearchValue] = useState(params?.search as string);
-  const [products, setProducts] = useState<Product[] | []>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [curPage, setCurPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const queryString = useMemo(() => {
-    return formatQueryToString(params, '');
+  function formatParams(obj: Record<string, any>): string {
+    return Object.entries(obj)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join('&');
+  }
+
+  const formattedString: string = useMemo(() => {
+    return formatParams(params ?? {}) || '';
   }, [params]);
-  const {
-    data: filterData,
-    isLoading: isLoadingFilter,
-    isSuccess: isSuccessFilter,
-  } = useGetProductFilterQuery({
-    type: params?.product_type,
-    search: `${queryString}`,
-  });
+
+  const { data: filterData, isSuccess: isSuccessFilter } =
+    useGetProductFilterQuery({
+      type: urlParams?.product_type,
+      search: formattedString,
+    });
+
   const {
     data: productsData,
     isSuccess: isSuccessProduct,
-    isLoading: isLoadingProduct,
     isFetching: isFetchingProduct,
   } = useGetProductsQuery({
-    type: params?.product_type,
-    search: `page=${curPage}&${queryString}`,
+    type: urlParams?.product_type,
+    search: `page=${curPage}&${formattedString}`,
   });
   const loadMore = useCallback(() => {
     if (hasMore && !isFetchingProduct && isSuccessProduct) {
       setCurPage((prevPage) => prevPage + 1);
     }
   }, [hasMore, isFetchingProduct, isSuccessProduct]);
+
   useEffect(() => {
-    if (!isFetchingProduct && isSuccessProduct && productsData && hasMore) {
-      if (productsData?.data?.length === 0) {
-        setProducts((prevProducts) => [...prevProducts]);
-      } else {
-        setProducts((prevProducts) => [...prevProducts, ...productsData?.data]);
-      }
-      if (curPage + 1 > productsData?.total_pages) {
-        setHasMore(false);
-      }
+    if (!isFetchingProduct && isSuccessProduct && productsData) {
+      setProducts((prevProducts) =>
+        curPage === 1
+          ? productsData.data
+          : [...prevProducts, ...productsData.data]
+      );
+      setHasMore(curPage < productsData.total_pages);
     }
-  }, [isFetchingProduct, isSuccessProduct, productsData, hasMore]);
+  }, [isFetchingProduct, isSuccessProduct, productsData]);
+
+  const handleSearch = () => {
+    setParams((prevParams: any) => {
+      return { ...prevParams, search: searchValue };
+    });
+    setProducts([]);
+    setCurPage(1);
+  };
   return (
     <SafeAreaView className='flex-1 bg-white'>
       <View className='px-4 my-4 flex-row justify-between items-center'>
@@ -63,24 +84,23 @@ export default function ProductTypeScreen() {
             className='flex-1 p-2'
             nativeID='search'
             value={searchValue}
-            onChangeText={(text) => setSearchValue(text)}
+            onChangeText={setSearchValue}
             placeholder='VD: CBR500...'
           />
           <Pressable
             className='justify-center items-center px-2'
-            onPress={() => {
-              router.setParams({ search: searchValue });
-              setProducts([]);
-            }}
+            onPress={handleSearch}
           >
             <AntDesign name='search1' size={24} color='black' />
           </Pressable>
         </View>
         <View className='ml-4'>
-          <FilterDialog filters={filterData} />
+          {isSuccessFilter && filterData && (
+            <FilterDialog filters={filterData} />
+          )}
         </View>
       </View>
-      {products?.length > 0 && (
+      {products.length > 0 ? (
         <ListItem
           data={products}
           renderItem={({ item, index }: any) => (
@@ -91,14 +111,15 @@ export default function ProductTypeScreen() {
           contentContainerStyle={40}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
-          isPaginate={true}
+          isPaginate
           isLoading={isFetchingProduct}
         />
-      )}
-      {!isLoadingProduct && products?.length === 0 && (
-        <View className='flex-1 justify-center items-center'>
-          <Text className='text-xl font-bold'>Không có sản phẩm!</Text>
-        </View>
+      ) : (
+        !isFetchingProduct && (
+          <View className='flex-1 justify-center items-center'>
+            <Text className='text-xl font-bold'>Không có sản phẩm!</Text>
+          </View>
+        )
       )}
     </SafeAreaView>
   );

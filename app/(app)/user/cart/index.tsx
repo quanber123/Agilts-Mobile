@@ -41,7 +41,7 @@ export default function CartScreen() {
   const handleOrder = useCallback(async () => {
     await AsyncStorage.setItem('selected_keys', JSON.stringify(selectedKeys));
     router.push('/order/item');
-  }, [router]);
+  }, [router, selectedKeys]);
   useEffect(() => {
     (async () => {
       const curItem = await AsyncStorage.getItem('order_now_item');

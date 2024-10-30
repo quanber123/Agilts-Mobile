@@ -16,7 +16,6 @@ import { defaultCountry } from '@/constants/Config';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LocationContext } from '../contexts/LocationProvider';
 import { UserContext } from '@/contexts/UserProvider';
-import { CustomInput } from '@/components/ui/CustomInput';
 export default function UpdateAddressScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
@@ -43,7 +42,7 @@ export default function UpdateAddressScreen() {
       !location.district.name ||
       !location.ward.name
     );
-  }, [contact, settings, addressDetails, location]);
+  }, [contact, addressDetails, location]);
   const [
     updateAddress,
     {
@@ -114,7 +113,7 @@ export default function UpdateAddressScreen() {
         };
       });
     }
-  }, [id, addresses]);
+  }, [id, addresses, setLocation]);
   useEffect(() => {
     if (isSuccessUpdate) {
       router.push(previousRoute !== '/' ? previousRoute : '/user/addresses');

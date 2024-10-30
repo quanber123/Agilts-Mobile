@@ -63,7 +63,7 @@ function SingleProduct({
         (!version || o.version === version) &&
         (o.volume === volume || !volume)
     );
-  }, [curTypeIndex, color, version, volume]);
+  }, [curTypeIndex, color, version, volume, product?.options]);
   const favorite = useMemo(() => {
     return wishlist?.find((w) =>
       selectedOption
@@ -136,7 +136,7 @@ function SingleProduct({
             </View>
           ))}
         {selectedOption && (
-          <Text className='absolute right-4 top-4 -rotate-2 bg-red-500 px-4 py-1 text-sm font-semibold text-white'>
+          <Text className='absolute right-4 top-4 -rotate-2 bg-red-500 px-4 py-1 text-sm font-semibold text-white z-10'>
             {selectedOption?.type_preview}
           </Text>
         )}

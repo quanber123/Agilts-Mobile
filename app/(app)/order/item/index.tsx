@@ -65,7 +65,7 @@ export default function OrderItem() {
       setPreviousRoute(prevRoute);
       router.push(nextRoute);
     },
-    [router]
+    [router, setPreviousRoute]
   );
   useEffect(() => {
     (async () => {

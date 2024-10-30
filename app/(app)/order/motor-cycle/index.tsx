@@ -75,7 +75,7 @@ export default function OrderMotorCycle() {
       setPreviousRoute(prevRoute);
       router.push(nextRoute);
     },
-    [router]
+    [router, setPreviousRoute]
   );
   useEffect(() => {
     (async () => {
@@ -91,7 +91,7 @@ export default function OrderMotorCycle() {
     } else {
       setCurPayment(null);
     }
-  }, []);
+  }, [setCurPayment, curPayment?.validRoute]);
   const handlePostPriceQuote = useCallback(async () => {
     if (motorcycle) {
       const bodyData = {

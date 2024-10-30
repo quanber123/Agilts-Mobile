@@ -1,11 +1,5 @@
 import { View, Text, Pressable, Linking } from 'react-native';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Href, router, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -53,10 +47,10 @@ export default function SuccessScreen() {
     !isLoadingOrderMotor
   )
     return <NotFoundScreen />;
-  const handleBack = useCallback(async () => {
+  const handleBack = async () => {
     await AsyncStorage.removeItem('cur_order');
     router.push('/');
-  }, [router]);
+  };
   useEffect(() => {
     if (
       isSuccessOrder &&

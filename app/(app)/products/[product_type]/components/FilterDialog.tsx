@@ -6,13 +6,20 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { ScrollView } from 'react-native-gesture-handler';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { ParamsContext } from '../ParamsProvider';
 const formatNumber = (value: string) => {
   if (!value) return '';
   const numericValue = parseFloat(value.replace(/,/g, ''));
@@ -22,7 +29,7 @@ const formatNumber = (value: string) => {
 };
 
 export default function FilterDialog({ filters }: any) {
-  const params = useLocalSearchParams();
+  const { params, setParams } = useContext(ParamsContext);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [filterForm, setFilterForm] = useState<any>();
   const [expandedSections, setExpandedSections] = useState<{
@@ -45,10 +52,6 @@ export default function FilterDialog({ filters }: any) {
       return { ...prevForm, [name]: numericValue };
     });
   };
-  const formatFilterForm = useMemo(() => {
-    return filters?.map((f: any) => f.name);
-  }, [filters]);
-
   const handleChange = useCallback((type_form: string, value: string) => {
     setFilterForm((prevForm: any) => ({
       ...prevForm,
@@ -58,46 +61,46 @@ export default function FilterDialog({ filters }: any) {
 
   const handleDeleteKey = useCallback(
     (key: string) => {
-      const newParams = { ...params };
-      delete newParams[key];
-      router.setParams(newParams);
+      setParams((prevParams: any) => {
+        return { ...prevParams, [key]: '' };
+      });
+      setFilterForm((prevFilter: any) => {
+        const newFilter = { ...prevFilter };
+        delete newFilter[key];
+        return newFilter;
+      });
     },
-    [params, router]
+    [setParams]
   );
+
   const handleDeleteKeyPrice = useCallback(() => {
-    const newParams = { ...params };
-    delete newParams['minPrice'];
-    delete newParams['maxPrice'];
-    router.setParams(newParams);
+    setParams((prevParams: any) => {
+      return { ...prevParams, minPrice: 0, maxPrice: 0 };
+    });
+    setFilterForm((prevFilter: any) => {
+      return { ...prevFilter, minPrice: 0, maxPrice: 0 };
+    });
   }, [router]);
   const handleDeleteAllKey = useCallback(() => {
-    router.setParams({});
+    setParams({});
+    setFilterForm({});
     setIsVisibleModal(false);
   }, [router]);
   const handleApply = useCallback(() => {
     const newParams = { ...params };
-
     Object.keys(filterForm).forEach((key) => {
       if (filterForm[key]) {
         newParams[key] = filterForm[key];
       }
     });
-    router.setParams(newParams);
+    setParams(newParams);
     setIsVisibleModal(false);
   }, [filterForm, params, router]);
   useEffect(() => {
-    const initialFilter = formatFilterForm?.reduce((acc: any, key: any) => {
-      if (key === 'minPrice' || key === 'maxPrice') {
-        acc[key] = Number(params[key]) || 0;
-      } else {
-        acc[key] = params[key] || '';
-      }
-      return acc;
-    }, {});
-
-    setFilterForm(initialFilter);
-  }, [formatFilterForm, params]);
-
+    if (params) {
+      setFilterForm(params);
+    }
+  }, [params]);
   const toggleExpand = (key: string) => {
     setExpandedSections((prevState) => ({
       ...prevState,
@@ -174,7 +177,7 @@ export default function FilterDialog({ filters }: any) {
                               >
                                 <Text
                                   numberOfLines={1}
-                                  className='h-[18px] font-medium text-neutral-400 text-xs'
+                                  className={`h-[18px] font-medium ${filterForm[f?.name] === itemKey ? 'text-red-500' : 'text-neutral-400'} text-xs`}
                                 >
                                   {typeof item === 'object'
                                     ? item[itemKey]

@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser, userState } from '@/services/redux/slice/userSlice';
 import { User } from '@/types/types';
 import { router } from 'expo-router';
-import Toast from 'react-native-toast-message';
 import { AlterContext } from './AlterProvider';
 type CTX = {
   user: User | null;
@@ -173,7 +172,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
             }
       );
     },
-    [verifyData2Fa]
+    [verifyData2Fa, verify]
   );
   const handleGetUser = useCallback(async () => {
     await getCsrfCookie(null);

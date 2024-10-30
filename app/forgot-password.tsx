@@ -29,7 +29,7 @@ export default function ForgotPasswordScreen() {
   }, [isSuccess, data]);
   const handleForgotPassword = useCallback(async () => {
     await forgotPassword({ email: email });
-  }, [email]);
+  }, [email, forgotPassword]);
   if (isLoading || isLoadingCsrfCookie || isLoadingUser || isLoadingSession)
     return <LoadingApp />;
   return (

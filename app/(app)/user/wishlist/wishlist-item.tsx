@@ -7,9 +7,6 @@ import React, {
 } from 'react';
 import CustomImage from '@/components/ui/CustomImage';
 import { Wishlist } from '@/types/types';
-import { formatPrice } from '@/services/utils/format';
-import Entypo from '@expo/vector-icons/Entypo';
-import { TextInput } from 'react-native-gesture-handler';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import { useDeleteWishlistMutation } from '@/services/redux/query/appQuery';
 import LoadingApp from '@/components/ui/LoadingApp';

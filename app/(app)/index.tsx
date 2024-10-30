@@ -6,12 +6,10 @@ import {
   useGetSettingsQuery,
 } from '@/services/redux/query/appQuery';
 import { router } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, ScrollView, Pressable } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
 export default function HomeScreen() {
-  const [curBanner, setCurBanner] = useState(0);
   const {
     data: settingData,
     isSuccess: isSuccessSetting,
@@ -44,33 +42,11 @@ export default function HomeScreen() {
     search: '',
     perPage: 8,
   });
-  const handleNextCarousel = useCallback(() => {
-    if (isSuccessSetting) {
-      setCurBanner((prevBanner) => {
-        if (
-          prevBanner + 1 >
-          settingData?.[0]?.value_preview?.banners?.length - 1
-        ) {
-          return 0;
-        } else {
-          return prevBanner + 1;
-        }
-      });
-    }
-  }, [isSuccessSetting, settingData?.[0]?.value_preview?.banners]);
-  useEffect(() => {
-    if (isSuccessSetting && settingData) {
-      const timeoutId = setInterval(() => {
-        handleNextCarousel();
-      }, settingData?.[0]?.value_preview?.time_to_automatically_switch_banners || 3000);
-      return () => clearInterval(timeoutId);
-    }
-  }, [isSuccessSetting, settingData]);
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView className='flex-col gap-8'>
-        {!isLoadingSetting && settingData && (
-          <PagerView className='h-[300px]' initialPage={curBanner}>
+      <ScrollView nestedScrollEnabled={true} className='flex-col gap-8'>
+        {!isLoadingSetting && isSuccessSetting && settingData && (
+          <PagerView className='h-[300px]' initialPage={0}>
             {settingData?.[0]?.value_preview?.banners?.map(
               (b: any, index: number) => {
                 return (

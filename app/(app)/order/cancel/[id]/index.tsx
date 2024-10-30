@@ -42,10 +42,10 @@ export default function CancelScreen() {
     !isLoadingOrderMotor
   )
     return <NotFoundScreen />;
-  const handleBack = useCallback(async () => {
+  const handleBack = async () => {
     await AsyncStorage.removeItem('cur_order');
     router.push('/');
-  }, [router]);
+  };
   if (isLoadingOrder || isLoadingOrderMotor) return <LoadingApp />;
   return isSuccessOrder ||
     (isSuccessOrderMotor && !isErrorOrder && !isErrorOrderMotor) ? (

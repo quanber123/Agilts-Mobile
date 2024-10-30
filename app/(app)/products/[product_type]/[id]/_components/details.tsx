@@ -13,7 +13,6 @@ import { useCreateCartMutation } from '@/services/redux/query/appQuery';
 import { FlatList } from 'react-native-gesture-handler';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
 import { CustomInput } from '@/components/ui/CustomInput';
 import Entypo from '@expo/vector-icons/Entypo';
 import CustomImage from '@/components/ui/CustomImage';
@@ -38,34 +37,28 @@ export default function DetailsSection({ product }: { product: Product }) {
   const [curColor, setCurColor] = useState(
     color || product?.options?.[0]?.color
   );
-  const handleChangeType = useCallback(
-    (t: string) => {
-      router.setParams({ type: t });
-      setCurType(t);
-      const curV = product?.options?.find((o) => o.type_preview === t)?.version;
-      const curC = product?.options?.find((o) => o.type_preview === t)?.color;
-      if (curV) {
-        setCurVersion(curV);
-      }
-      if (curC) {
-        setCurColor(curC);
-      }
-    },
-    [router]
-  );
-  const handleChangeVersion = useCallback(
-    (v: string) => {
-      router.setParams({ version: v });
-      setCurVersion(v);
-      const curC = product?.options?.find(
-        (o) => o.type_preview === curType && o.version === v
-      )?.color;
-      if (curC) {
-        setCurColor(curC);
-      }
-    },
-    [router]
-  );
+  const handleChangeType = useCallback((t: string) => {
+    router.setParams({ type: t });
+    setCurType(t);
+    const curV = product?.options?.find((o) => o.type_preview === t)?.version;
+    const curC = product?.options?.find((o) => o.type_preview === t)?.color;
+    if (curV) {
+      setCurVersion(curV);
+    }
+    if (curC) {
+      setCurColor(curC);
+    }
+  }, []);
+  const handleChangeVersion = useCallback((v: string) => {
+    router.setParams({ version: v });
+    setCurVersion(v);
+    const curC = product?.options?.find(
+      (o) => o.type_preview === curType && o.version === v
+    )?.color;
+    if (curC) {
+      setCurColor(curC);
+    }
+  }, []);
   const handleChangeColor = useCallback(
     (c: string) => {
       router.setParams({ color: c });
