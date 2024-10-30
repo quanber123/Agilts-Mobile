@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/favicon-32x32.png",
-    "scheme": "agilts",
+    "scheme": "Agilts-Mobile",
     "userInterfaceStyle": "automatic",
     "platforms": ["ios", "android", "web"],
     "splash": {

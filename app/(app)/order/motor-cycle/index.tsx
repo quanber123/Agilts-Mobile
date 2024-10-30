@@ -120,8 +120,8 @@ export default function OrderMotorCycle() {
         registration_option: registrationOptions?.value,
         license_plate_registration_option:
           licensePlateRegistrationOption?.value,
-        return_url: `agilts://order/success/{id}`,
-        cancel_url: `agilts://order/cancel/{id}`,
+        return_url: `Agilts-Mobile://order/success/{id}`,
+        cancel_url: `Agilts-Mobile://order/cancel/{id}`,
         payment_method: curPayment?.id,
         note: '',
       };
