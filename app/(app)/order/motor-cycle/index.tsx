@@ -30,6 +30,7 @@ import LoadingApp from '@/components/ui/LoadingApp';
 import { ScrollView } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
 import { ListPayment, PaymentContext } from '@/contexts/PaymentProvider';
+import { CustomInput } from '@/components/ui/CustomInput';
 
 export default function OrderMotorCycle() {
   const [isPending, startTransition] = useTransition();
@@ -48,6 +49,7 @@ export default function OrderMotorCycle() {
   const [supportRegistration, setSupportRegistration] = useState(false);
   const { curPayment, setCurPayment } = useContext(PaymentContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [note, setNote] = useState('');
   const [motorcycle, setMotorcycle] = useState<ProductOption | null>(null);
   const {
     branchOption,
@@ -221,6 +223,15 @@ export default function OrderMotorCycle() {
               </Text>
             </View>
           )}
+        </View>
+        <View className='my-2 gap-2'>
+          <Text className='font-bold text-lg'>Ghi chú</Text>
+          <CustomInput
+            value={note}
+            nativeID='note'
+            onChangeText={(text) => setNote(text)}
+            placeholder='Thêm ghi chú'
+          />
         </View>
         <View className='flex-col'>
           <View className='mb-2 flex-row justify-between items-center gap-x-4'>

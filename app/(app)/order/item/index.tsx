@@ -26,12 +26,13 @@ import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
 import { DeliveryContext } from '@/contexts/DeliveryProvider';
 import { formatPrice } from '@/services/utils/format';
+import { CustomInput } from '@/components/ui/CustomInput';
 
 export default function OrderItem() {
   const [isPending, startTransition] = useTransition();
   const { curDelivery } = useContext(DeliveryContext);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [note, setNote] = useState('');
   const { branches, loadMoreBranch, isLoadingBranch } =
     useContext(BranchContext);
   const { setAlertModal, setIsAlertModal, setMessages } =
@@ -213,6 +214,15 @@ export default function OrderItem() {
                   </Text>
                 </View>
               )}
+            </View>
+            <View className='my-2 gap-2'>
+              <Text className='font-bold text-lg'>Ghi chú</Text>
+              <CustomInput
+                value={note}
+                nativeID='note'
+                onChangeText={(text) => setNote(text)}
+                placeholder='Thêm ghi chú'
+              />
             </View>
             <View>
               <View className='flex-row justify-between items-center p-2'>

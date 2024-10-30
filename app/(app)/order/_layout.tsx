@@ -13,8 +13,14 @@ export default function OrderScreen() {
             headerTintColor: 'white',
           }}
         >
-          <Stack.Screen name='item' options={{ headerShown: false }} />
-          <Stack.Screen name='motor-cycle' options={{ headerShown: false }} />
+          <Stack.Screen
+            name='item/index'
+            options={{ headerShown: false, title: 'Đặt hàng' }}
+          />
+          <Stack.Screen
+            name='motor-cycle/index'
+            options={{ headerShown: true, title: 'Đặt xe máy' }}
+          />
           <Stack.Screen name='success' options={{ headerShown: false }} />
           <Stack.Screen name='cancel' options={{ headerShown: false }} />
         </Stack>
