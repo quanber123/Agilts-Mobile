@@ -4,6 +4,9 @@
   },
   "build": {
     "production": {
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://backend.agilts.com",
         "EXPO_PUBLIC_API_COUNTRY": "https://esgoo.net/api-tinhthanh",

@@ -80,7 +80,7 @@ export default function ProductTypeScreen() {
           <FilterDialog filters={filterData} />
         </View>
       </View>
-      {/* {products?.length > 0 && (
+      {products?.length > 0 && (
         <ListItem
           data={products}
           renderItem={({ item, index }: any) => (
@@ -99,7 +99,7 @@ export default function ProductTypeScreen() {
         <View className='flex-1 justify-center items-center'>
           <Text className='text-xl font-bold'>Không có sản phẩm!</Text>
         </View>
-      )} */}
+      )}
     </SafeAreaView>
   );
 }
