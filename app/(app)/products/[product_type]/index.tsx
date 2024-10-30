@@ -1,6 +1,6 @@
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Pressable } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import {
   useGetProductFilterQuery,
   useGetProductsQuery,
@@ -9,9 +9,12 @@ import { formatQueryToString } from '@/services/utils/format';
 import SingleProduct from '@/components/ui/SingleProduct';
 import { Product } from '@/types/types';
 import ListItem from '@/components/ui/ListItem';
+import FilterDialog from './components/FilterDialog';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function ProductTypeScreen() {
   const params = useLocalSearchParams();
+  const [searchValue, setSearchValue] = useState(params?.search as string);
   const [products, setProducts] = useState<Product[] | []>([]);
   const [curPage, setCurPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -21,11 +24,15 @@ export default function ProductTypeScreen() {
   const {
     data: filterData,
     isLoading: isLoadingFilter,
-    isError: isErrorFilter,
-  } = useGetProductFilterQuery(params?.product_type);
+    isSuccess: isSuccessFilter,
+  } = useGetProductFilterQuery({
+    type: params?.product_type,
+    search: `${queryString}`,
+  });
   const {
     data: productsData,
     isSuccess: isSuccessProduct,
+    isLoading: isLoadingProduct,
     isFetching: isFetchingProduct,
   } = useGetProductsQuery({
     type: params?.product_type,
@@ -50,7 +57,30 @@ export default function ProductTypeScreen() {
   }, [isFetchingProduct, isSuccessProduct, productsData, hasMore]);
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      {products?.length > 0 && (
+      <View className='px-4 my-4 flex-row justify-between items-center'>
+        <View className='flex-1 border border-neutral-300 flex-row items-stretch'>
+          <TextInput
+            className='flex-1 p-2'
+            nativeID='search'
+            value={searchValue}
+            onChangeText={(text) => setSearchValue(text)}
+            placeholder='VD: CBR500...'
+          />
+          <Pressable
+            className='justify-center items-center px-2'
+            onPress={() => {
+              router.setParams({ search: searchValue });
+              setProducts([]);
+            }}
+          >
+            <AntDesign name='search1' size={24} color='black' />
+          </Pressable>
+        </View>
+        <View className='ml-4'>
+          <FilterDialog filters={filterData} />
+        </View>
+      </View>
+      {/* {products?.length > 0 && (
         <ListItem
           data={products}
           renderItem={({ item, index }: any) => (
@@ -65,11 +95,11 @@ export default function ProductTypeScreen() {
           isLoading={isFetchingProduct}
         />
       )}
-      {!isFetchingProduct && products?.length === 0 && (
+      {!isLoadingProduct && products?.length === 0 && (
         <View className='flex-1 justify-center items-center'>
           <Text className='text-xl font-bold'>Không có sản phẩm!</Text>
         </View>
-      )}
+      )} */}
     </SafeAreaView>
   );
 }

@@ -17,7 +17,6 @@ import {
   useDeleteWishlistMutation,
 } from '@/services/redux/query/appQuery';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Toast from 'react-native-toast-message';
 import { AlterContext } from '@/contexts/AlterProvider';
 
 function SingleProduct({

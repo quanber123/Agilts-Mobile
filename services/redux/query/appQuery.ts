@@ -225,8 +225,8 @@ export const appApi = createApi({
         invalidatesTags: ['address'],
       }),
       getProductFilter: builder.query({
-        query: (type) => ({
-          url: `/api/product/${type}/filter`,
+        query: ({ type, search }) => ({
+          url: `/api/product/${type}/filter?${search ? search : ''}`,
           method: 'GET',
         }),
       }),

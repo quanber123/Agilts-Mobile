@@ -48,7 +48,7 @@ const CustomImage: React.FC<CustomImageProps> = ({
 
   return (
     <View style={[styles.loaderContainer, style]}>
-      {!loaded && <ActivityIndicator size='large' color='#ef4444' />}
+      {!loaded && src && <ActivityIndicator size='large' color='#ef4444' />}
       {src && (
         <Image
           key={src}
