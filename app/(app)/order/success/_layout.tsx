@@ -10,7 +10,7 @@ export default function OrderScreen() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name='[id]/index' options={{ headerShown: false }} />
+      <Stack.Screen name='[id]' options={{ headerShown: false }} />
     </Stack>
   );
 }

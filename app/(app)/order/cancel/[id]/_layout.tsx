@@ -9,7 +9,7 @@ export default function OrderScreen() {
         headerTintColor: 'white',
       }}
     >
-      <Stack.Screen name='[id]' options={{ headerShown: false }} />
+      <Stack.Screen name='index' options={{ headerShown: false }} />
     </Stack>
   );
 }

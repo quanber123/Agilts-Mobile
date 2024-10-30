@@ -287,7 +287,7 @@ export const appApi = createApi({
       getOrders: builder.query({
         query: (search) => ({
           url: `/api/order?${search}`,
-          method: 'POST',
+          method: 'GET',
         }),
         providesTags: ['order-item'],
       }),

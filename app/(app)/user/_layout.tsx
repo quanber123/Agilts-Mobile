@@ -61,19 +61,15 @@ const UserLayout = () => {
             }}
           />
           <Stack.Screen
-            name='order/item/index'
+            name='order/item'
             options={{
-              headerTitle: 'Đơn mua phụ tùng/phụ kiện',
-              headerTitleAlign: 'center',
-              headerShown: true,
+              headerShown: false,
             }}
           />
           <Stack.Screen
-            name='order/motor-cycle/index'
+            name='order/motor-cycle'
             options={{
-              headerTitle: 'Đơn mua xe máy',
-              headerTitleAlign: 'center',
-              headerShown: true,
+              headerShown: false,
             }}
           />
           <Stack.Screen

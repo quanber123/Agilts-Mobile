@@ -101,7 +101,9 @@ export default function ProductTypeScreen() {
           )}
         </View>
       </View>
-      <ProductSort />
+      <View className='pb-6'>
+        <ProductSort />
+      </View>
       {products.length > 0 ? (
         <ListItem
           data={products}

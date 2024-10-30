@@ -15,14 +15,8 @@ export default function OrderScreen() {
         >
           <Stack.Screen name='item' options={{ headerShown: false }} />
           <Stack.Screen name='motor-cycle' options={{ headerShown: false }} />
-          <Stack.Screen
-            name='success/[id]/index'
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name='cancel/[id]/index'
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name='success' options={{ headerShown: false }} />
+          <Stack.Screen name='cancel' options={{ headerShown: false }} />
         </Stack>
       </OptionMotorProvider>
     </BranchProvider>
