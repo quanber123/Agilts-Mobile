@@ -17,6 +17,7 @@ import ListItem from '@/components/ui/ListItem';
 import FilterDialog from './components/FilterDialog';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { ParamsContext } from './ParamsProvider';
+import ProductSort from './components/sort';
 
 export default function ProductTypeScreen() {
   const urlParams = useLocalSearchParams();
@@ -100,6 +101,7 @@ export default function ProductTypeScreen() {
           )}
         </View>
       </View>
+      <ProductSort />
       {products.length > 0 ? (
         <ListItem
           data={products}
