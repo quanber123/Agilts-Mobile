@@ -124,7 +124,7 @@ export default function UserScreen() {
           <View className='items-center justify-center'>
             <Feather name='help-circle' size={24} color='#059669' />
           </View>
-          <Text>Trum tâm trợ giúp</Text>
+          <Text>Trung tâm trợ giúp</Text>
         </View>
         <FontAwesome6 name='chevron-right' size={12} color='black' />
       </Pressable>
