@@ -18,8 +18,11 @@ import Entypo from '@expo/vector-icons/Entypo';
 import CustomImage from '@/components/ui/CustomImage';
 import { AlterContext } from '@/contexts/AlterProvider';
 import LoadingApp from '@/components/ui/LoadingApp';
+import { ImageContext } from '@/contexts/ImageProvider';
 
 export default function DetailsSection({ product }: { product: Product }) {
+  const { setIndexValue, setImagesList, setVisibleImage } =
+    useContext(ImageContext);
   const { product_type, type, version, color, volume } = useLocalSearchParams();
   const { setAlertModal, setIsAlertModal, setMessages } =
     useContext(AlterContext);
@@ -196,20 +199,31 @@ export default function DetailsSection({ product }: { product: Product }) {
   return (
     <View className='flex-col'>
       <View className='w-full flex-row justify-center items-center border border-neutral-300 mb-4'>
-        <CustomImage
-          width={300}
-          height={260}
-          src={
-            selectedOption
-              ? selectedOption?.images_preview?.[0]?.url
-              : product?.options?.[0]?.images_preview?.[0]?.url
-          }
-          alt={
-            selectedOption
-              ? selectedOption?.images_preview?.[0]?.alt
-              : product?.options?.[0]?.images_preview?.[0]?.alt
-          }
-        />
+        <Pressable
+          onPress={() => {
+            setIndexValue(0);
+            setImagesList(
+              selectedOption?.images_preview ||
+                product?.options?.[0]?.images_preview
+            );
+            setVisibleImage(true);
+          }}
+        >
+          <CustomImage
+            width={300}
+            height={260}
+            src={
+              selectedOption
+                ? selectedOption?.images_preview?.[0]?.url
+                : product?.options?.[0]?.images_preview?.[0]?.url
+            }
+            alt={
+              selectedOption
+                ? selectedOption?.images_preview?.[0]?.alt
+                : product?.options?.[0]?.images_preview?.[0]?.alt
+            }
+          />
+        </Pressable>
       </View>
       {selectedOption && (
         <FlatList
@@ -225,12 +239,24 @@ export default function DetailsSection({ product }: { product: Product }) {
               : selectedOption?.images_preview
           }
           keyExtractor={(item) => item.alt}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             return (
               <Pressable
                 className='border border-neutral-300'
                 aria-label='image'
                 key={item?.alt}
+                onPress={() => {
+                  setIndexValue(
+                    selectedOption?.images_preview?.length > 4
+                      ? index + 1
+                      : index
+                  );
+                  setImagesList(
+                    selectedOption?.images_preview ||
+                      product?.options?.[0]?.images_preview
+                  );
+                  setVisibleImage(true);
+                }}
               >
                 <CustomImage
                   src={item?.url}
