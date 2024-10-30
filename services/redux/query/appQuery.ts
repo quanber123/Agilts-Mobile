@@ -14,6 +14,7 @@ export const appApi = createApi({
     'order-item',
     'settings',
     'invoice',
+    'review',
   ],
   endpoints: (builder) => {
     return {
@@ -328,6 +329,28 @@ export const appApi = createApi({
         }),
         providesTags: ['invoice'],
       }),
+      getUserReview: builder.query({
+        query: (search) => ({
+          url: `/api/review-customer?${search}`,
+          method: 'GET',
+        }),
+        providesTags: ['review'],
+      }),
+      createReview: builder.mutation({
+        query: (body) => ({
+          url: `/api/review-customer`,
+          method: 'POST',
+          data: body,
+        }),
+        invalidatesTags: ['review'],
+      }),
+      postImage: builder.mutation({
+        query: (body) => ({
+          url: `/api/review-customer/image`,
+          method: 'POST',
+          data: body,
+        }),
+      }),
     };
   },
 });
@@ -377,4 +400,7 @@ export const {
   useCancelOrderMutation,
   useGetSettingsQuery,
   useGetInvoiceQuery,
+  useGetUserReviewQuery,
+  useCreateReviewMutation,
+  usePostImageMutation,
 } = appApi;

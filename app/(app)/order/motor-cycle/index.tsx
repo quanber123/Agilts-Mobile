@@ -31,6 +31,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
 import { ListPayment, PaymentContext } from '@/contexts/PaymentProvider';
 import { CustomInput } from '@/components/ui/CustomInput';
+import ImageUpload from '../../user/order/ImageUpload';
 
 export default function OrderMotorCycle() {
   const [isPending, startTransition] = useTransition();
@@ -407,11 +408,6 @@ export default function OrderMotorCycle() {
               {motorcycle?.color && (
                 <Text className='text-xs text-neutral-500'>
                   Màu sắc: {motorcycle?.color}
-                </Text>
-              )}
-              {motorcycle?.volume && (
-                <Text className='text-xs text-neutral-500'>
-                  Thể tích: {motorcycle?.volume}
                 </Text>
               )}
               <View className='flex-row justify-between'>

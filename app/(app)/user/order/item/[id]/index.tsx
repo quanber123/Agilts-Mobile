@@ -9,8 +9,8 @@ import LoadingApp from '@/components/ui/LoadingApp';
 import { statusOrder } from '@/config/status_order';
 import ListItem from '@/components/ui/ListItem';
 import { Order } from '@/types/types';
-import CustomImage from '@/components/ui/CustomImage';
 import { AlterContext } from '@/contexts/AlterProvider';
+import SingleItem from './singleItem';
 
 export default function OrderDetails() {
   const { id } = useLocalSearchParams();
@@ -86,66 +86,7 @@ export default function OrderDetails() {
             contentContainerStyle={40}
             data={(data as Order)?.options}
             renderItem={({ item }: { item: Order }) => {
-              return (
-                <View className='flex-row justify-between items-start'>
-                  <View>
-                    <CustomImage
-                      width={120}
-                      height={90}
-                      src={item?.option?.images_preview?.[0]?.url}
-                      alt={item?.option?.images_preview?.[0]?.alt}
-                    />
-                  </View>
-                  <View className='ml-4 flex-1'>
-                    <View className='flex-row justify-between items-center'>
-                      <Text className='font-medium' numberOfLines={1}>
-                        {item?.option?.product?.name}
-                      </Text>
-                    </View>
-                    {item?.option?.version && (
-                      <Text className='text-xs text-neutral-500'>
-                        Phiên bản: {item?.option?.version}
-                      </Text>
-                    )}
-                    {item?.option?.color && (
-                      <Text className='text-xs text-neutral-500'>
-                        Màu sắc: {item?.option?.color}
-                      </Text>
-                    )}
-                    {item?.option?.volume && (
-                      <Text className='text-xs text-neutral-500'>
-                        Thể tích: {item?.option?.volume}
-                      </Text>
-                    )}
-                    {item?.option?.weight && (
-                      <Text className='text-xs text-neutral-500'>
-                        Cân nặng: {item?.option?.weight}
-                      </Text>
-                    )}
-                    {item?.option?.length && (
-                      <Text className='text-xs text-neutral-500'>
-                        Chiều dài: {item?.option?.length}
-                      </Text>
-                    )}
-                    {item?.option?.width && (
-                      <Text className='text-xs text-neutral-500'>
-                        Chiều rộng: {item?.option?.width}
-                      </Text>
-                    )}
-                    {item?.option?.height && (
-                      <Text className='text-xs text-neutral-500'>
-                        Chiều cao: {item?.option?.height}
-                      </Text>
-                    )}
-                    <View className='flex-row justify-between'>
-                      <Text className='text-neutral-500'>x{item?.amount}</Text>
-                      <Text className='text-right'>
-                        {item?.option?.price_preview?.preview}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              );
+              return <SingleItem order={item} />;
             }}
           />
         </View>
