@@ -86,7 +86,7 @@ function SingleProduct({
     if (isSuccessCreate) {
       setAlertModal('success');
       setIsAlertModal(true);
-      setMessages('Thêm sản phẩm vào danh sách ước thành công!');
+      setMessages('Thêm sản phẩm vào danh sách mong muốn thành công!');
     }
     if (isErrorCreate && errorCreate) {
       setAlertModal('error');
@@ -98,7 +98,7 @@ function SingleProduct({
     if (isSuccessDelete) {
       setAlertModal('success');
       setIsAlertModal(true);
-      setMessages('Xóa sản phẩm vào danh sách ước thành công!');
+      setMessages('Xóa sản phẩm khỏi danh sách mong muốn thành công!');
     }
     if (isErrorDelete && errorDelete) {
       setAlertModal('error');
