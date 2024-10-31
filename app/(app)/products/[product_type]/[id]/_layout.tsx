@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 
-export default function ProductDetailsScreen() {
+export default function ProductTypeScreen() {
   return (
     <Stack
       screenOptions={{
@@ -11,7 +11,9 @@ export default function ProductDetailsScreen() {
     >
       <Stack.Screen
         name='index'
-        options={{ headerShown: true, title: 'Sản phẩm chi tiết' }}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack>
   );

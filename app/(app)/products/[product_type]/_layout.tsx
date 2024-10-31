@@ -23,7 +23,10 @@ export default function ProductTypeScreen() {
             title: curType ? curType?.value : 'Sản phẩm',
           }}
         />
-        <Stack.Screen name='[id]' options={{ headerShown: false }} />
+        <Stack.Screen
+          name='[id]'
+          options={{ headerShown: true, title: 'Sản phẩm chi tiết' }}
+        />
       </Stack>
     </ParamsProvider>
   );

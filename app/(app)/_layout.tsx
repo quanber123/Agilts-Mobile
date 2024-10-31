@@ -1,11 +1,11 @@
-import { Redirect, Tabs } from 'expo-router';
-import React from 'react';
+import { Href, Redirect, router, Tabs } from 'expo-router';
+import React, { useEffect } from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useSession } from '@/contexts/SessionProvider';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { Image } from 'expo-image';
 import { PaymentProvider } from '@/contexts/PaymentProvider';
 import { DeliveryProvider } from '@/contexts/DeliveryProvider';
@@ -39,7 +39,33 @@ export default function TabLayout() {
       </View>
     );
   }
+  useEffect(() => {
+    if (user) {
+      const handleDeepLink = (url: string) => {
+        const route = url.replace(/.*?:\/\//g, '');
+        const [basePath, _, id] = route.split('/');
+        if (basePath === 'agilts/return') {
+          router.push(`/success/order/${id}` as Href<string>);
+        } else if (basePath === 'agilts/cancel') {
+          router.push(`/cancel/order/${id}` as Href<string>);
+        }
+      };
 
+      const subscription = Linking.addEventListener('url', ({ url }) => {
+        handleDeepLink(url);
+      });
+
+      Linking.getInitialURL().then((url) => {
+        if (url) {
+          handleDeepLink(url);
+        }
+      });
+
+      return () => {
+        subscription.remove();
+      };
+    }
+  }, [user]);
   // Only require authentication within the (app) group's layout as users
   // need to be able to access the (auth) group and sign in again.
   if (!user) {

@@ -116,7 +116,7 @@ export default function UserScreen() {
         </View>
         <FontAwesome6 name='chevron-right' size={12} color='black' />
       </Pressable>
-      <Pressable
+      {/* <Pressable
         className='p-4 border-b border-neutral-300 flex-row justify-between items-center'
         onPress={() => router.push('/')}
       >
@@ -127,7 +127,7 @@ export default function UserScreen() {
           <Text>Trung tâm trợ giúp</Text>
         </View>
         <FontAwesome6 name='chevron-right' size={12} color='black' />
-      </Pressable>
+      </Pressable> */}
       <Pressable onPress={signOut} className='bg-red-500 mt-auto p-4'>
         <Text className='text-center font-bold text-white'>Đăng xuất</Text>
       </Pressable>

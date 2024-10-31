@@ -30,31 +30,6 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
   useEffect(() => {
-    const handleDeepLink = (url: string) => {
-      const route = url.replace(/.*?:\/\//g, '');
-      const [basePath, _, id] = route.split('/');
-      if (basePath === 'agilts/return') {
-        router.push(`/success/order/${id}` as Href<string>);
-      } else if (basePath === 'agilts/cancel') {
-        router.push(`/cancel/order/${id}` as Href<string>);
-      }
-    };
-
-    const subscription = Linking.addEventListener('url', ({ url }) => {
-      handleDeepLink(url);
-    });
-
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        handleDeepLink(url);
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-  useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }

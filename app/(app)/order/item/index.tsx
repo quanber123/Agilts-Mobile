@@ -74,7 +74,7 @@ export default function OrderItem() {
       if (curItem !== null) {
         const listId = JSON.parse(curItem);
         setOptions(
-          cart?.filter((c) => listId?.includes(c?.option?.id)) || cart[0]
+          cart?.filter((c) => listId?.includes?.(c?.option?.id)) || cart?.[0]
         );
       }
     })();
@@ -104,8 +104,8 @@ export default function OrderItem() {
           };
         }),
         address_id: defaultAddress?.id,
-        return_url: `agilts://order/success/{id}`,
-        cancel_url: `agilts://order/cancel/{id}`,
+        return_url: `Agilts-Mobile://order/success/{id}`,
+        cancel_url: `Agilts-Mobile://order/cancel/{id}`,
         payment_method: curPayment?.id,
         shipping_method: curDelivery?.id,
         note: '',
