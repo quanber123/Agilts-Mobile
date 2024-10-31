@@ -69,15 +69,17 @@ export default function OrderItem() {
     [router, setPreviousRoute]
   );
   useEffect(() => {
-    (async () => {
-      const curItem = await AsyncStorage.getItem('order_now_item');
-      if (curItem !== null) {
-        const listId = JSON.parse(curItem);
-        setOptions(
-          cart?.filter((c) => listId?.includes?.(c?.option?.id)) || cart?.[0]
-        );
-      }
-    })();
+    if (cart?.length > 0) {
+      (async () => {
+        const curItem = await AsyncStorage.getItem('order_now_item');
+        if (curItem !== null) {
+          const listId = JSON.parse(curItem);
+          setOptions(
+            cart?.filter((c) => listId?.includes?.(c?.option?.id)) || cart?.[0]
+          );
+        }
+      })();
+    }
   }, [cart]);
   const handlePostPriceQuote = useCallback(async () => {
     if (options?.length > 0) {

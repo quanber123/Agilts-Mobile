@@ -1,6 +1,11 @@
-<intent-filter>
-  <action android:name="android.intent.action.VIEW" />
-  <category android:name="android.intent.category.DEFAULT" />
-  <category android:name="android.intent.category.BROWSABLE" />
-  <data android:scheme="Agilts-Mobile" android:host="order" />
-</intent-filter>
+<activity android:name=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        
+        <!-- Match exact paths for success and cancel -->
+        <data android:scheme="agilts-mobile" android:host="order" android:path="/success" />
+        <data android:scheme="agilts-mobile" android:host="order" android:path="/cancel" />
+    </intent-filter>
+</activity>

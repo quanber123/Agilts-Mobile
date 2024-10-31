@@ -176,11 +176,7 @@ export default function DetailsSection({ product }: { product: Product }) {
           'order_now_item',
           JSON.stringify([selectedOption?.id])
         );
-        router.push(
-          `/order/item?state=${encodeURIComponent(
-            JSON.stringify([selectedOption?.id])
-          )}`
-        );
+        router.push(`/user/cart`);
         setIsBuyNow(false);
       })();
     }
