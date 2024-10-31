@@ -84,6 +84,7 @@ export default function AddAddressScreen() {
                 return { ...prevContact, customer_name: value };
               })
             }
+            errorValue={errors?.errors?.customer_name?.[0]}
           />
           <CustomInput
             nativeID='customer_phone_number'
@@ -96,6 +97,7 @@ export default function AddAddressScreen() {
                 return { ...prevContact, customer_phone_number: value };
               })
             }
+            errorValue={errors?.errors?.customer_phone_number?.[0]}
           />
         </View>
       </View>
