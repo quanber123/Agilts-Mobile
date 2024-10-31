@@ -35,6 +35,13 @@ export const appApi = createApi({
           };
         },
       }),
+      updateUser: builder.mutation({
+        query: (body) => ({
+          url: `/api/user/profile-information`,
+          method: 'PUT',
+          data: body,
+        }),
+      }),
       login: builder.mutation({
         query: (body) => ({
           url: `/api/login`,
@@ -358,6 +365,7 @@ export const appApi = createApi({
 export const {
   useGetCSRFCookieMutation,
   useGetUserMutation,
+  useUpdateUserMutation,
   useRegisterMutation,
   useLoginMutation,
   useLogoutMutation,

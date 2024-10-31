@@ -85,11 +85,9 @@ const UserLayout = () => {
             }}
           />
           <Stack.Screen
-            name='settings/index'
+            name='settings'
             options={{
-              headerTitle: 'Thiết lập tài khoản',
-              headerTitleAlign: 'center',
-              headerShown: true,
+              headerShown: false,
             }}
           />
         </Stack>

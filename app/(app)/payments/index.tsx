@@ -27,6 +27,7 @@ export default function PaymentsScreen() {
           renderItem={({ item }: any) => {
             return (
               <Pressable
+                disabled={curPayment?.id === item?.id}
                 className='flex-row justify-between items-center p-4 border-b border-neutral-300'
                 onPress={() => setCurPayment(item)}
               >

@@ -13,6 +13,7 @@ import {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
+  useUpdateUserMutation,
   useVerifyTwoFactorMutation,
 } from '@/services/redux/query/appQuery';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +24,19 @@ import { AlterContext } from './AlterProvider';
 type CTX = {
   user: User | null;
   getUser: () => Promise<void>;
+  updateUser: ({
+    name,
+    email,
+    phone_number,
+    birthday,
+    gender,
+  }: {
+    name: string;
+    email: string;
+    phone_number: string;
+    birthday: string;
+    gender: number;
+  }) => Promise<void>;
   signUp: ({
     email,
     password,
@@ -47,6 +61,8 @@ type CTX = {
   isLoadingSession: boolean;
   isLoadingCsrfCookie: boolean;
   isLoadingUser: boolean;
+  isLoadingUpdate: boolean;
+  isSuccessUpdate: boolean;
   isLoadingRegister: boolean;
   isLoadingLogin: boolean;
   isLoadingLogout: boolean;
@@ -72,8 +88,6 @@ type ErrorResponse = {
   message: string;
 };
 export function SessionProvider({ children }: PropsWithChildren) {
-  const { setAlertModal, setIsAlertModal, setMessages } =
-    useContext(AlterContext);
   const [[isLoadingSession, session], setSession] =
     useStorageState('x-user-session');
   const user = useSelector(userState);
@@ -103,6 +117,15 @@ export function SessionProvider({ children }: PropsWithChildren) {
       error: errorRegister,
     },
   ] = useRegisterMutation();
+  const [
+    updateUser,
+    {
+      isLoading: isLoadingUpdate,
+      isSuccess: isSuccessUpdate,
+      isError: isErrorUpdate,
+      error: errorUpdate,
+    },
+  ] = useUpdateUserMutation();
   const [
     login,
     {
@@ -149,6 +172,25 @@ export function SessionProvider({ children }: PropsWithChildren) {
       await register({ email, password, name, password_confirmation });
     },
     [getCsrfCookie, register]
+  );
+  const handleUpdate = useCallback(
+    async ({
+      name,
+      email,
+      phone_number,
+      birthday,
+      gender,
+    }: {
+      name: string;
+      email: string;
+      phone_number: string;
+      birthday: string;
+      gender: number;
+    }) => {
+      await getCsrfCookie(null);
+      await updateUser({ name, email, phone_number, birthday, gender });
+    },
+    [getCsrfCookie, updateUser]
   );
   const handleSignIn = useCallback(
     async ({ email, password }: { email: string; password: string }) => {
@@ -201,23 +243,21 @@ export function SessionProvider({ children }: PropsWithChildren) {
     }
   }, [isSuccessUser, userData, isErrorUser, errorUser, dispatch, router]);
   useEffect(() => {
-    if (isSuccessRegister && registerData) {
-      setSession(registerData?.token);
-      setErrorResponse(null);
-      setAlertModal('success');
-      setIsAlertModal(true);
-      setMessages('Đăng ký thành công!');
+    if (isSuccessUpdate) {
+      async () => {
+        await handleGetUser();
+      };
     }
-    if (isErrorRegister && errorRegister) {
-      const error = errorRegister as any;
+    if (isErrorUpdate && errorUpdate) {
+      const error = errorUpdate as any;
       setErrorResponse({
-        type: 'register',
+        type: 'update',
         errors: error?.data?.errors,
         message: error?.data?.message,
       });
       setSession(null);
     }
-  }, [isSuccessRegister, registerData, isErrorRegister, errorRegister]);
+  }, [isSuccessUpdate, registerData, isErrorUpdate, errorUpdate]);
   useEffect(() => {
     if (isSuccessRegister && registerData) {
       setSession(registerData?.token);
@@ -302,6 +342,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
       value={{
         user: user,
         getUser: handleGetUser,
+        updateUser: handleUpdate,
         signUp: handleSignUp,
         signIn: handleSignIn,
         signOut: handleSignOut,
@@ -309,6 +350,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
         session,
         isLoadingSession,
         isLoadingCsrfCookie,
+        isLoadingUpdate,
+        isSuccessUpdate,
         isLoadingRegister,
         isLoadingLogin,
         isLoadingLogout,
